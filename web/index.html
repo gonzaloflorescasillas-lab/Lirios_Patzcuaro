@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lirio, nutrientes y oxígeno en el Lago de Pátzcuaro</title>
+<style>
+:root {
+  --white: #ffffff; --mist: #f5f5f7; --frost: #fafafc; --hairline: #d6d6d6; --control: #e6e6e8;
+  --ink: #1d1d1f; --slate: #707070; --steel: #86868b; --blue: #0066cc; --pill: #0071e3; --orange: #b64400; --red: #c4001a;
+  --series: #0071e3; --base: #86868b;
+  --display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  --text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  --math: "STIX Two Math", "Cambria Math", "Latin Modern Math", "Times New Roman", serif;
+  --radius-card: 28px; --section-gap: 90px; --gap: 20px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+body { margin: 0; background: var(--white); color: var(--ink); font-family: var(--text); font-size: 17px; line-height: 1.47; letter-spacing: -0.374px; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+section { padding: var(--section-gap) 0; }
+.mist { background: var(--mist); }
+
+/* Navegación local */
+.localnav { position: sticky; top: 0; z-index: 20; background: rgba(250,250,252,0.92); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--control); }
+.localnav .wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; gap: 24px; }
+.localnav .brand { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: 0.228px; white-space: nowrap; }
+.localnav ul { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; overflow-x: auto; }
+.localnav li a { color: var(--ink); font-size: 12px; letter-spacing: -0.12px; white-space: nowrap; opacity: 0.8; }
+.localnav li a:hover { opacity: 1; text-decoration: none; color: var(--blue); }
+
+/* Hero */
+.hero { text-align: center; padding: 96px 0 72px; }
+.kicker { font-family: var(--display); font-weight: 600; font-size: 21px; letter-spacing: 0.231px; margin: 0 0 16px; }
+.kicker.orange { color: var(--orange); font-family: var(--text); font-size: 12px; letter-spacing: -0.12px; }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(44px, 7vw, 80px); line-height: 1.05; letter-spacing: -1.2px; margin: 0 auto 24px; max-width: 980px; }
+.lead { font-size: 21px; line-height: 1.38; letter-spacing: 0.231px; color: var(--ink); max-width: 760px; margin: 0 auto 32px; }
+.authors { color: var(--slate); font-size: 14px; letter-spacing: -0.224px; line-height: 1.6; max-width: 760px; margin: 0 auto 36px; }
+.actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; padding: 11px 22px; font-size: 17px; letter-spacing: -0.374px; font-family: var(--text); cursor: pointer; border: 1px solid transparent; background: none; color: var(--ink); }
+.btn:hover { text-decoration: none; }
+.btn.primary { background: var(--pill); color: #fff; }
+.btn.primary:hover { background: #0077ed; }
+.btn.outline { border-color: var(--pill); color: var(--pill); }
+.btn.small { font-size: 12px; padding: 6px 14px; letter-spacing: -0.12px; }
+
+/* Encabezados de sección */
+.section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
+h2 { font-family: var(--display); font-weight: 600; font-size: clamp(32px, 4.4vw, 48px); line-height: 1.08; letter-spacing: -0.4px; margin: 0; }
+h3 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.17; letter-spacing: 0.1px; margin: 0 0 12px; }
+.section-lead { color: var(--slate); max-width: 680px; margin: 12px 0 0; }
+.muted { color: var(--slate); }
+.small { font-size: 14px; letter-spacing: -0.224px; line-height: 1.43; }
+
+/* Tarjetas */
+.card { background: var(--white); border-radius: var(--radius-card); padding: 28px; }
+.white-section .card { background: var(--mist); }
+.grid { display: grid; gap: var(--gap); }
+.grid > *, .sim > *, .results > * { min-width: 0; }
+.eqb { overflow-x: auto; overflow-y: hidden; }
+.g4 { grid-template-columns: repeat(4, 1fr); }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+.g2 { grid-template-columns: repeat(2, 1fr); }
+.span2 { grid-column: span 2; }
+.stat-label { font-size: 14px; letter-spacing: -0.224px; color: var(--slate); margin: 0 0 8px; }
+.stat-value { font-family: var(--display); font-weight: 600; font-size: 40px; line-height: 1.05; letter-spacing: -0.4px; margin: 0; font-variant-numeric: tabular-nums; }
+.stat-value .unit { font-size: 21px; font-weight: 500; color: var(--slate); letter-spacing: 0; margin-left: 4px; }
+.stat-note { font-size: 14px; letter-spacing: -0.224px; color: var(--slate); margin: 10px 0 0; }
+.stat-note b { color: var(--ink); font-weight: 600; }
+
+/* Ecuaciones */
+math { font-family: var(--math); font-size: 1.18em; }
+math[display="block"] { margin: 0; overflow-x: auto; overflow-y: hidden; padding: 4px 0; }
+.eq-list { display: grid; gap: 18px; }
+.eq-row { display: grid; grid-template-columns: 1fr; gap: 6px; }
+.eq-row .eq-note { font-size: 14px; letter-spacing: -0.224px; color: var(--slate); }
+.vars { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); margin-bottom: 48px; }
+.var-symbol { font-family: var(--math); font-style: italic; font-size: 40px; line-height: 1; margin: 0 0 12px; }
+
+/* Simulador */
+.sim { display: grid; grid-template-columns: 320px 1fr; gap: var(--gap); align-items: start; }
+.controls { position: sticky; top: 72px; max-height: calc(100vh - 88px); overflow-y: auto; }
+.controls h3 { font-size: 21px; }
+.segmented { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--mist); border-radius: 9999px; padding: 3px; margin: 4px 0 24px; }
+.segmented button { border: 0; background: transparent; font-family: var(--text); font-size: 12px; letter-spacing: -0.12px; padding: 7px 4px; border-radius: 9999px; cursor: pointer; color: var(--ink); }
+.segmented button[aria-pressed="true"] { background: var(--white); box-shadow: 0 0 0 1px var(--control); font-weight: 600; }
+.ctrl { margin-bottom: 20px; }
+.ctrl-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+.ctrl label { font-size: 14px; letter-spacing: -0.224px; }
+.ctrl label i { font-family: var(--math); font-size: 16px; }
+.ctrl output { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.224px; }
+.ctrl .hint { font-size: 12px; color: var(--slate); letter-spacing: -0.12px; margin-top: 4px; }
+input[type=range] { width: 100%; accent-color: var(--pill); margin: 0; height: 20px; cursor: pointer; }
+details { border-top: 1px solid var(--control); padding: 14px 0 0; margin-top: 8px; }
+details + details { margin-top: 14px; }
+summary { cursor: pointer; font-size: 14px; letter-spacing: -0.224px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; margin-bottom: 14px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-weight: 400; color: var(--steel); font-size: 18px; line-height: 1; }
+details[open] summary::after { content: "–"; }
+.results { display: grid; gap: var(--gap); }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 12px; }
+.metric { background: var(--white); border-radius: 20px; padding: 16px 16px 14px; }
+.metric .stat-value { font-size: 23px; white-space: nowrap; }
+.metric .stat-label { font-size: 12px; letter-spacing: -0.12px; margin-bottom: 6px; }
+.metric .stat-note { font-size: 12px; letter-spacing: -0.12px; margin-top: 6px; }
+.status { font-size: 14px; letter-spacing: -0.224px; padding: 14px 20px; background: var(--white); border-radius: 20px; display: flex; gap: 10px; align-items: center; }
+.status .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.chart-card { background: var(--white); border-radius: var(--radius-card); padding: 22px 22px 14px; position: relative; }
+.white-section .chart-card { background: var(--mist); }
+.chart-title { font-family: var(--display); font-size: 17px; font-weight: 600; letter-spacing: 0.1px; margin: 0 0 2px; }
+.chart-sub { font-size: 12px; color: var(--slate); letter-spacing: -0.12px; margin: 0 0 8px; }
+.chart { width: 100%; position: relative; }
+.chart svg { display: block; width: 100%; overflow: visible; }
+.chart text { font-family: var(--text); font-size: 11px; fill: var(--slate); letter-spacing: -0.1px; }
+.chart .axis line, .chart .grid line { stroke: var(--control); }
+.chart .axis-title { fill: var(--slate); font-size: 11px; }
+.tooltip { position: absolute; pointer-events: none; background: rgba(255,255,255,0.97); border: 1px solid var(--hairline); border-radius: 12px; padding: 8px 12px; font-size: 12px; letter-spacing: -0.12px; line-height: 1.5; white-space: nowrap; opacity: 0; transition: opacity .12s; z-index: 5; }
+.tooltip b { font-weight: 600; }
+.tooltip .sw { display: inline-block; width: 10px; height: 2px; vertical-align: middle; margin-right: 6px; }
+.legend { display: flex; gap: 20px; flex-wrap: wrap; font-size: 12px; letter-spacing: -0.12px; color: var(--slate); margin-top: 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend .ln { width: 18px; height: 0; border-top: 2px solid; }
+.legend .ln.dash { border-top-style: dashed; }
+.legend .ln.dot { border-top-style: dotted; }
+
+/* Tablas */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; letter-spacing: -0.224px; font-variant-numeric: tabular-nums; }
+th { text-align: right; font-weight: 600; color: var(--slate); font-size: 12px; letter-spacing: -0.12px; padding: 10px 12px; border-bottom: 1px solid var(--hairline); white-space: nowrap; }
+td { text-align: right; padding: 10px 12px; border-bottom: 1px solid var(--control); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+tr:last-child td { border-bottom: 0; }
+tr.hl td { font-weight: 600; }
+table.params td, table.params th { text-align: left; white-space: normal; }
+table.params td:nth-child(2) { white-space: nowrap; }
+.matrix { display: inline-grid; grid-template-columns: repeat(3, auto); gap: 6px 28px; padding: 8px 18px; border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); border-radius: 8px; font-variant-numeric: tabular-nums; font-size: 15px; text-align: right; }
+.matrix.vec { grid-template-columns: auto; }
+.matrices { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-size: 15px; }
+
+footer { background: var(--mist); padding: 48px 0 64px; font-size: 12px; letter-spacing: -0.12px; color: var(--slate); line-height: 1.6; }
+footer .refs { columns: 2; column-gap: 40px; margin-top: 16px; padding-left: 0; list-style: none; }
+footer .refs li { break-inside: avoid; margin-bottom: 6px; }
+footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
+
+@media (max-width: 980px) {
+  .sim { grid-template-columns: 1fr; }
+  .controls { position: static; max-height: none; }
+  .metrics { grid-template-columns: repeat(2, 1fr); }
+  .g4 { grid-template-columns: repeat(2, 1fr); }
+  .g3, .vars { grid-template-columns: 1fr; }
+}
+@media (max-width: 680px) {
+  .g2, .g4 { grid-template-columns: 1fr; }
+  .span2 { grid-column: auto; }
+  .localnav ul { display: none; }
+  footer .refs { columns: 1; }
+}
+@media print {
+  .localnav, .actions, .controls { display: none; }
+  .sim { grid-template-columns: 1fr; }
+  section { padding: 32px 0; break-inside: avoid-page; }
+  .mist, footer { background: #fff; }
+}
+</style>
+</head>
+<body>
+
+<nav class="localnav" aria-label="Secciones">
+  <div class="wrap">
+    <span class="brand">Lirio · Pátzcuaro</span>
+    <ul>
+      <li><a href="#resultados">Resultados</a></li>
+      <li><a href="#modelo">Modelo</a></li>
+      <li><a href="#simulador">Simulador</a></li>
+      <li><a href="#sensibilidad">Sensibilidad</a></li>
+      <li><a href="#fase">Plano de fase</a></li>
+      <li><a href="#solucion">Solución analítica</a></li>
+      <li><a href="#parametros">Parámetros</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="kicker">Modelo dinámico de tres ecuaciones acopladas</p>
+    <h1>Lirio, nutrientes y oxígeno en el Lago de Pátzcuaro.</h1>
+    <p class="lead">Una cosecha mecánica anual de 30 % de la biomasa de lirio reduce el equilibrio de 391 mil a 174 mil toneladas y eleva el oxígeno disuelto de 4.39 a 5.63 mg/L, por encima del umbral de 5 mg/L para peces de agua cálida.</p>
+    <p class="authors">Gonzalo Flores Casillas · César Ramiro Angeles Torres · Ana Cecilia Fernández Becerril · Tania Danae Ríos Hernández · Tadeo Antonio Horta Díaz<br>Tecnológico de Monterrey, Campus Ciudad de México · 26 de noviembre de 2026</p>
+    <div class="actions">
+      <a class="btn primary" href="#simulador">Abrir el simulador</a>
+      <a class="btn outline" href="#modelo">Ver el modelo</a>
+    </div>
+  </div>
+</header>
+
+<section id="resultados" class="mist">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Resultados clave.</h2>
+        <p class="section-lead">Equilibrio del sistema linealizado sin intervención (η = 0) y con cosecha mecánica para biogás (η = 0.30 año⁻¹).</p>
+      </div>
+      <a href="#simulador">Explorar otros escenarios ›</a>
+    </div>
+    <div class="grid g4" id="key-results"></div>
+  </div>
+</section>
+
+<section id="modelo" class="white-section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>El modelo.</h2>
+        <p class="section-lead">Tres variables de estado describen la retroalimentación entre la biomasa del lirio, los nutrientes limitantes y el oxígeno disuelto del lago.</p>
+      </div>
+    </div>
+    <div class="vars">
+      <div class="card"><p class="var-symbol">R(t)</p><h3>Biomasa de lirio</h3><p class="muted small">Toneladas de peso húmedo de <i>Eichhornia crassipes</i> flotante. Cobertura = R / (200 t/ha · 9,000 ha).</p></div>
+      <div class="card"><p class="var-symbol">N(t)</p><h3>Nutrientes N + P</h3><p class="muted small">Toneladas de nitrógeno y fósforo disueltos en la columna de agua; el lago está colimitado por ambos.</p></div>
+      <div class="card"><p class="var-symbol">O(t)</p><h3>Oxígeno disuelto</h3><p class="muted small">Toneladas de O₂ en 423 millones de m³. Concentración (mg/L) = O / 423.</p></div>
+    </div>
+    <div class="grid g2">
+      <div class="card span2">
+        <h3>Forma no lineal</h3>
+        <p class="muted small" style="margin:0 0 18px">Crecimiento logístico con cinética de Monod y cosecha con respuesta de Holling tipo II.</p>
+        <div class="eq-list">
+          <!--MATH:nl_R-->
+          <!--MATH:nl_N-->
+          <!--MATH:nl_O-->
+        </div>
+      </div>
+      <div class="card">
+        <h3>Forma linealizada</h3>
+        <p class="muted small" style="margin:0 0 18px">Alrededor del estado actual: la cosecha es una fracción η de la biomasa. Es la forma que grafica este documento.</p>
+        <div class="eq-list">
+          <!--MATH:lin_R-->
+          <!--MATH:lin_N-->
+          <!--MATH:lin_O-->
+          <div class="eq-row"><span class="eq-note">con <!--MATH:sigma_ef:inline--> y <!--MATH:A_nat:inline--></span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Forma matricial</h3>
+        <!--MATH:matricial-->
+        <p class="muted small" style="margin:14px 0 0">A es triangular inferior por bloques: el oxígeno no retroalimenta a R ni a N, por lo que el polinomio característico se factoriza en un término lineal y uno cuadrático.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="simulador" class="mist">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Simulador.</h2>
+        <p class="section-lead">Mueve los parámetros y observa cómo responden la biomasa, los nutrientes y el oxígeno. La línea punteada gris es siempre el escenario sin proyecto con los mismos parámetros.</p>
+      </div>
+    </div>
+    <div class="sim">
+      <aside class="card controls" aria-label="Controles">
+        <h3>Escenario</h3>
+        <div class="segmented" role="group" aria-label="Escenarios predefinidos">
+          <button type="button" data-preset="0">Sin proyecto</button>
+          <button type="button" data-preset="0.3">Con cosecha</button>
+          <button type="button" data-preset="custom">Personalizado</button>
+        </div>
+        <div id="ctrl-main"></div>
+        <details><summary>Lirio y nutrientes</summary><div id="ctrl-bio"></div></details>
+        <details><summary>Oxígeno</summary><div id="ctrl-oxy"></div></details>
+        <details><summary>Condiciones iniciales</summary><div id="ctrl-ini"></div></details>
+        <div style="margin-top:20px"><button type="button" class="btn small outline" id="reset">Restablecer valores del documento</button></div>
+      </aside>
+      <div class="results">
+        <div class="metrics" id="metrics"></div>
+        <div class="status" id="status"></div>
+        <div class="grid g2">
+          <div class="chart-card"><p class="chart-title">Biomasa de lirio</p><p class="chart-sub">R(t), toneladas</p><div class="chart" id="ch-R"></div></div>
+          <div class="chart-card"><p class="chart-title">Nutrientes</p><p class="chart-sub">N(t), toneladas de N + P</p><div class="chart" id="ch-N"></div></div>
+          <div class="chart-card"><p class="chart-title">Oxígeno disuelto</p><p class="chart-sub">O(t), mg/L</p><div class="chart" id="ch-O"></div></div>
+          <div class="chart-card"><p class="chart-title">Cobertura del espejo de agua</p><p class="chart-sub">Porcentaje de las 9,000 ha</p><div class="chart" id="ch-C"></div></div>
+        </div>
+        <div class="legend" id="legend-sim"></div>
+        <div class="card" style="padding:20px 24px">
+          <h3 style="font-size:17px">Trayectoria a 10, 25 y 50 años</h3>
+          <div class="table-wrap"><table id="tbl-tray"></table></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sensibilidad" class="white-section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Sensibilidad del equilibrio.</h2>
+        <p class="section-lead">Los rendimientos de la cosecha son decrecientes, y la carga externa de nutrientes pesa más que la cosecha: el lirio es más un síntoma que una causa.</p>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="chart-card"><p class="chart-title">Oxígeno de equilibrio vs η</p><p class="chart-sub">O<sub>p</sub> en mg/L</p><div class="chart" id="ch-s-O"></div></div>
+      <div class="chart-card"><p class="chart-title">Biomasa y cosecha sostenible vs η</p><p class="chart-sub">Toneladas</p><div class="chart" id="ch-s-R"></div></div>
+      <div class="chart-card span2"><p class="chart-title">Oxígeno de equilibrio vs carga externa</p><p class="chart-sub">O<sub>p</sub> en mg/L para L<sub>ext</sub> entre 100 y 600 t/año</p><div class="chart" id="ch-s-L"></div></div>
+      <div class="card span2" style="padding:20px 24px">
+        <h3 style="font-size:17px">Equilibrio para distintas intensidades de cosecha</h3>
+        <div class="table-wrap"><table id="tbl-eta"></table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="fase" class="mist">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Plano de fase R–N.</h2>
+        <p class="section-lead">El subsistema de lirio y nutrientes no depende del oxígeno. Todas las trayectorias convergen al equilibrio estable; el modo lento domina el acercamiento.</p>
+      </div>
+    </div>
+    <div class="chart-card"><div class="chart" id="ch-fase"></div><div class="legend" id="legend-fase"></div></div>
+  </div>
+</section>
+
+<section id="solucion" class="white-section">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Solución analítica.</h2>
+        <p class="section-lead">Método de valores y vectores propios para <span id="sol-scn"></span>. Los valores se recalculan con los parámetros del simulador.</p>
+      </div>
+    </div>
+    <div class="grid g2">
+      <div class="card span2">
+        <h3>1. Valores propios</h3>
+        <!--MATH:carac-->
+        <div class="table-wrap" style="margin-top:14px"><table id="tbl-eig"></table></div>
+        <p class="small muted" id="stab" style="margin:14px 0 0"></p>
+      </div>
+      <div class="card">
+        <h3>2. Sistema numérico</h3>
+        <div class="matrices" id="mat"></div>
+        <h3 style="margin-top:28px">3. Vectores propios</h3>
+        <!--MATH:vec-->
+      </div>
+      <div class="card">
+        <h3>4. Solución particular (equilibrio)</h3>
+        <div class="eq-list"><!--MATH:Np--><!--MATH:Rp--><!--MATH:Op--></div>
+        <div class="table-wrap" style="margin-top:14px"><table id="tbl-eq"></table></div>
+      </div>
+      <div class="card span2">
+        <h3>5. Solución general</h3>
+        <!--MATH:general-->
+        <p class="small muted" style="margin:14px 0 10px">Con Y(0) y las constantes C<sub>1</sub>, C<sub>2</sub>, C<sub>3</sub>:</p>
+        <div class="eq-list" id="explicit"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="parametros" class="mist">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>Parámetros.</h2>
+        <p class="section-lead">Cada valor se apoyó en datos publicados del lago; cuando no hubo medición directa se usaron casos análogos.</p>
+      </div>
+    </div>
+    <div class="card"><div class="table-wrap"><table class="params">
+      <thead><tr><th>Parámetro</th><th>Valor</th><th>Origen</th><th>Fuente</th></tr></thead>
+      <tbody>
+        <tr><td>Superficie y profundidad media</td><td>9,000 ha; 4.70 m</td><td>Reportado</td><td>Tomasini-Ortiz et al. (2016)</td></tr>
+        <tr><td>Volumen del lago</td><td>423 millones de m³</td><td>Calculado</td><td>Tomasini-Ortiz et al. (2016)</td></tr>
+        <tr><td>N(0)</td><td>1,091 t (2.58 mg/L)</td><td>Calculado</td><td>Rosas et al. (1993)</td></tr>
+        <tr><td>O(0)</td><td>1,904 t (4.5 mg/L)</td><td>Calculado</td><td>Rosas et al. (1993)</td></tr>
+        <tr><td>R(0)</td><td>360,000 t</td><td>Supuesto por analogía</td><td>Excélsior (2026); UF/IFAS (s. f.)</td></tr>
+        <tr><td>L<sub>ext</sub> · carga externa</td><td>261 t/año</td><td>Calculado</td><td>Tomasini-Ortiz et al. (2016)</td></tr>
+        <tr><td>c · N+P por t de lirio fresco</td><td>0.00186 t/t</td><td>Calculado</td><td>Little (1979); Keche et al. (2022); NASA (1975)</td></tr>
+        <tr><td>μ · mortalidad natural</td><td>0.45 año⁻¹</td><td>Calibrado</td><td>Little (1979); NASA (1975)</td></tr>
+        <tr><td>r<sub>ef</sub> · conversión nutriente → biomasa</td><td>161.6 t t⁻¹ año⁻¹</td><td>Calibrado</td><td>Kobayashi et al. (2008)</td></tr>
+        <tr><td>σ<sub>sed</sub> · sedimentación</td><td>0.15 año⁻¹</td><td>Supuesto</td><td>Tomasini-Ortiz et al. (2016)</td></tr>
+        <tr><td>δ · fracción reciclada</td><td>0.70</td><td>Supuesto</td><td>Reddy y Sacco (1981)</td></tr>
+        <tr><td>k<sub>o</sub> · reaireación</td><td>36.5 año⁻¹</td><td>Supuesto</td><td>Reaireación típica de lagos someros</td></tr>
+        <tr><td>A<sub>nat</sub> · aporte natural de O₂</td><td>115,796 t/año</td><td>Calculado</td><td>O<sub>sat</sub> = 7.5 mg/L a 2,035 m s. n. m.</td></tr>
+        <tr><td>α · pérdida de O₂ por lirio</td><td>0.0582 t O₂ t⁻¹ año⁻¹</td><td>Calculado y calibrado</td><td>Miskella et al. (2021)</td></tr>
+        <tr><td>β · demanda bioquímica</td><td>23.24 t O₂ t⁻¹ año⁻¹</td><td>Calibrado</td><td>Estequiometría de Redfield</td></tr>
+        <tr><td>η · intensidad de cosecha</td><td>0.30 año⁻¹</td><td>Supuesto por analogía</td><td>Excélsior (2026); The EastAfrican (2017)</td></tr>
+        <tr><td>Biogás</td><td>474.9 m³/t SV; 631 m³/t ST</td><td>Reportado</td><td>Keche et al. (2022); Dirar y El Amin (1988)</td></tr>
+      </tbody>
+    </table></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p style="margin:0">Documento interactivo del proyecto <b style="color:var(--ink);font-weight:600">“Modelo dinámico del lirio acuático en el Lago de Pátzcuaro”</b>. Funciona sin conexión: todos los cálculos se hacen en el navegador con el modelo linealizado del documento.</p>
+    <hr>
+    <p style="margin:0;font-weight:600;color:var(--ink)">Referencias citadas</p>
+    <ul class="refs">
+      <li>Bernal-Brooks, F. W. (2002). Disminución del nivel y superficie del Lago de Pátzcuaro.</li>
+      <li>Bernal-Brooks, F. W. et al. (2003). Colimitación de nitrógeno y fósforo en Pátzcuaro.</li>
+      <li>Dirar, H. A. y El Amin, H. B. (1988). Producción de biogás a partir de lirio acuático.</li>
+      <li>Excélsior (2026). Reducción del lirio en la Presa Endhó.</li>
+      <li>Keche, D. et al. (2022). Digestión anaerobia de <i>Eichhornia crassipes</i>.</li>
+      <li>Kobayashi, J. T. et al. (2008). Limitación por nutrientes en el crecimiento del lirio.</li>
+      <li>Little, E. C. S. (1979). Handbook of utilization of aquatic plants. FAO.</li>
+      <li>Miskella, J. et al. (2021). Oxígeno disuelto bajo tapetes de lirio acuático.</li>
+      <li>NASA (1975). Remoción de nutrientes con lirio acuático.</li>
+      <li>Reddy, K. R. y Sacco, P. D. (1981). Descomposición del lirio y liberación de nutrientes.</li>
+      <li>Rosas, I. et al. (1993). Calidad del agua del Lago de Pátzcuaro.</li>
+      <li>The EastAfrican (2017). Cosechadora de lirio en el Lago Victoria.</li>
+      <li>Tomasini-Ortiz, A. C. et al. (2016). Calidad del agua y descargas en la cuenca de Pátzcuaro. IMTA.</li>
+      <li>UF/IFAS (s. f.). Water hyacinth. University of Florida.</li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+"use strict";
+const T_POR_MG_L = 423, AREA_HA = 9000, DENS = 200;
+const DEFAULTS = { eta: 0.30, L_ext: 261.3, horizonte: 50, mu: 0.45, r_ef: 161.62, c: 0.0018565, delta: 0.70, sigma_sed: 0.15,
+  alpha: 0.0582, beta: 23.24, k_o: 36.5, O_sat: 7.5, R0: 360000, N0: 1091.3, O0: 4.5 };
+const CONTROLS = {
+  "ctrl-main": [
+    ["eta", "η", "intensidad de cosecha", 0, 1, 0.01, 2, "año⁻¹", "Fracción de la biomasa disponible que se cosecha cada año."],
+    ["L_ext", "L<sub>ext</sub>", "carga externa de nutrientes", 100, 600, 0.1, 1, "t/año", "Descargas puntuales; no incluye el aporte difuso agrícola."],
+    ["horizonte", "", "Horizonte", 5, 100, 1, 0, "años"],
+  ],
+  "ctrl-bio": [
+    ["mu", "μ", "mortalidad natural", 0.1, 1, 0.01, 2, "año⁻¹"],
+    ["r_ef", "r<sub>ef</sub>", "conversión", 50, 300, 0.01, 2, "t t⁻¹ año⁻¹"],
+    ["c", "c", "N+P por t de lirio", 0.0005, 0.005, 0.00001, 5, "t/t"],
+    ["delta", "δ", "fracción reciclada", 0, 1, 0.01, 2, ""],
+    ["sigma_sed", "σ<sub>sed</sub>", "sedimentación", 0, 1, 0.01, 2, "año⁻¹"],
+  ],
+  "ctrl-oxy": [
+    ["alpha", "α", "pérdida de O₂ por lirio", 0, 0.2, 0.0001, 4, ""],
+    ["beta", "β", "demanda bioquímica", 0, 60, 0.01, 2, ""],
+    ["k_o", "k<sub>o</sub>", "reaireación", 5, 100, 0.5, 1, "año⁻¹"],
+    ["O_sat", "O<sub>sat</sub>", "saturación", 5, 10, 0.1, 1, "mg/L"],
+  ],
+  "ctrl-ini": [
+    ["R0", "R(0)", "biomasa", 0, 1500000, 1000, 0, "t"],
+    ["N0", "N(0)", "nutrientes", 0, 5000, 0.1, 1, "t"],
+    ["O0", "O(0)", "oxígeno", 0, 12, 0.1, 1, "mg/L"],
+  ],
+};
+const COLOR = { esc: "#0071e3", base: "#86868b", aux: "#1d1d1f", orange: "#b64400", red: "#c4001a" };
+const UMBRAL_PECES = 5, UMBRAL_HIPOXIA = 2.5;
+
+const fmtNum = (x, d = 0) => Number(x).toLocaleString("es-MX", { minimumFractionDigits: d, maximumFractionDigits: d });
+const fmtSig = (x, s = 4) => {
+  if (x === 0) return "0";
+  const a = Math.abs(x);
+  if (a >= 1e5 || a < 1e-3) { const [m, e] = x.toExponential(s - 1).split("e"); return `${m} × 10${sup(+e)}`; }
+  return fmtNum(x, Math.max(0, s - 1 - Math.floor(Math.log10(a))));
+};
+const sup = n => String(n).split("").map(ch => "⁰¹²³⁴⁵⁶⁷⁸⁹"["0123456789".indexOf(ch)] ?? (ch === "-" ? "⁻" : ch)).join("");
+
+// ---------- Modelo ----------
+function modelo(p) {
+  const sigma_ef = p.sigma_sed + p.c * p.r_ef;
+  const A_nat = p.k_o * p.O_sat * T_POR_MG_L;
+  const a = -(p.mu + p.eta), b = p.r_ef, c21 = p.delta * p.c * p.mu, d = -sigma_ef;
+  const det = a * d - b * c21;
+  const Rp = b * p.L_ext / det, Np = -a * p.L_ext / det;
+  const Op = (A_nat - p.alpha * Rp - p.beta * Np) / p.k_o;
+  const tr = a + d, disc = Math.sqrt(Math.max(tr * tr - 4 * det, 0));
+  const lam = [(tr + disc) / 2, (tr - disc) / 2, -p.k_o];
+  const V = lam.slice(0, 2).map(l => { const vN = (l - a) / b; return [1, vN, -(p.alpha + p.beta * vN) / (p.k_o + l)]; });
+  V.push([0, 0, 1]);
+  const Y0 = [p.R0, p.N0, p.O0 * T_POR_MG_L], Yp = [Rp, Np, Op];
+  const d0 = Y0[0] - Rp, d1 = Y0[1] - Np, d2 = Y0[2] - Op;
+  const C1 = (d1 - V[1][1] * d0) / (V[0][1] - V[1][1]), C2 = d0 - C1, C3 = d2 - C1 * V[0][2] - C2 * V[1][2];
+  const C = [C1, C2, C3];
+  const at = t => [0, 1, 2].map(i => Yp[i] + C[0] * V[0][i] * Math.exp(lam[0] * t) + C[1] * V[1][i] * Math.exp(lam[1] * t) + C[2] * V[2][i] * Math.exp(lam[2] * t));
+  const A = [[a, b, 0], [c21, d, 0], [-p.alpha, -p.beta, -p.k_o]], F = [0, p.L_ext, A_nat];
+  return { p, sigma_ef, A_nat, A, F, det, Yp, lam, V, C, at, estable: det > 0 && tr < 0 };
+}
+const equilibrio = p => modelo(p).Yp;
+const mgL = o => o / T_POR_MG_L;
+const cobertura = r => r / DENS / AREA_HA * 100;
+const biogas = h => { const st = h * 0.083; return [st * 0.8482 * 474.9 / 1e6, st * 631 / 1e6]; };
+const linspace = (a, b, n) => Array.from({ length: n }, (_, i) => a + (b - a) * i / (n - 1));
+
+// ---------- Gráficas SVG ----------
+function niceTicks(min, max, n = 5) {
+  if (min === max) { min -= 1; max += 1; }
+  const span = max - min, step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => span / s <= n) || 10 * mag;
+  const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step, ticks = [];
+  for (let v = lo; v <= hi + step * 1e-9; v += step) ticks.push(+v.toFixed(10));
+  return ticks;
+}
+const tickFmt = v => { const a = Math.abs(v); return a >= 1e6 ? fmtNum(v / 1e6, a % 1e6 ? 1 : 0) + " M" : a >= 1e4 ? fmtNum(v / 1e3, 0) + " mil" : fmtNum(v, a < 10 && v % 1 ? (v * 10 % 1 ? 2 : 1) : 0); };
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs = {}, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+
+function lineChart(container, cfg) {
+  container.innerHTML = "";
+  const W = Math.max(container.clientWidth, 280), H = cfg.height || 240;
+  const m = { l: 56, r: 16, t: 12, b: cfg.xTitle ? 40 : 26 };
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H, role: "img" }, container);
+  const xs = cfg.x, allY = cfg.series.flatMap(s => s.y).concat((cfg.hlines || []).filter(h => h.inRange).map(h => h.y));
+  let yMin = Math.min(...allY), yMax = Math.max(...allY);
+  if (cfg.yZero) yMin = Math.min(0, yMin);
+  const pad = (yMax - yMin) * 0.08 || Math.abs(yMax) * 0.05 || 1;
+  const yt = niceTicks(yMin - (cfg.yZero ? 0 : pad), yMax + pad, 5);
+  const y0 = yt[0], y1 = yt[yt.length - 1], x0 = xs[0], x1 = xs[xs.length - 1];
+  const X = v => m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r), Y = v => H - m.b - (v - y0) / (y1 - y0) * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg);
+  yt.forEach(v => { el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v) }, g); el("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end" }, svg).textContent = (cfg.yFmt || tickFmt)(v); });
+  niceTicks(x0, x1, Math.max(3, Math.min(6, Math.floor(W / 90)))).filter(v => v >= x0 - 1e-9 && v <= x1 + 1e-9).forEach(v => {
+    el("text", { x: X(v), y: H - m.b + 16, "text-anchor": "middle" }, svg).textContent = (cfg.xFmt || tickFmt)(v);
+  });
+  if (cfg.xTitle) el("text", { x: (m.l + W - m.r) / 2, y: H - 4, "text-anchor": "middle", class: "axis-title" }, svg).textContent = cfg.xTitle;
+  (cfg.hlines || []).forEach(h => {
+    if (h.y < y0 || h.y > y1) return;
+    el("line", { x1: m.l, x2: W - m.r, y1: Y(h.y), y2: Y(h.y), stroke: h.color, "stroke-width": 1.2, "stroke-dasharray": "2 4", "stroke-linecap": "round" }, svg);
+    const t = el("text", { x: W - m.r, y: Y(h.y) - 6, "text-anchor": "end" }, svg); t.textContent = h.label; t.style.fill = h.color;
+  });
+  (cfg.vlines || []).forEach(v => {
+    el("line", { x1: X(v.x), x2: X(v.x), y1: m.t, y2: H - m.b, stroke: COLOR.aux, "stroke-width": 1, "stroke-dasharray": "4 4", opacity: 0.5 }, svg);
+    const t = el("text", { x: X(v.x) + 6, y: m.t + 10 }, svg); t.textContent = v.label; t.style.fill = COLOR.aux;
+  });
+  cfg.series.forEach(s => {
+    const d = s.y.map((v, i) => `${i ? "L" : "M"}${X(xs[i]).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+    el("path", { d, fill: "none", stroke: s.color, "stroke-width": s.width || 2.5, "stroke-dasharray": s.dash || "", "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+  });
+  // Interacción
+  const tip = document.createElement("div"); tip.className = "tooltip"; container.appendChild(tip);
+  const cross = el("line", { y1: m.t, y2: H - m.b, stroke: COLOR.aux, "stroke-width": 1, opacity: 0 }, svg);
+  const dots = cfg.series.map(s => el("circle", { r: 4, fill: "#fff", stroke: s.color, "stroke-width": 2, opacity: 0 }, svg));
+  const overlay = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  const hide = () => { tip.style.opacity = 0; cross.setAttribute("opacity", 0); dots.forEach(d => d.setAttribute("opacity", 0)); };
+  const move = ev => {
+    const r = svg.getBoundingClientRect(), px = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+    const xv = x0 + (px * W / r.width - m.l) / (W - m.l - m.r) * (x1 - x0);
+    let i = 0, best = Infinity; xs.forEach((v, k) => { const dd = Math.abs(v - xv); if (dd < best) { best = dd; i = k; } });
+    const cx = X(xs[i]);
+    cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.setAttribute("opacity", 0.25);
+    cfg.series.forEach((s, k) => { dots[k].setAttribute("cx", cx); dots[k].setAttribute("cy", Y(s.y[i])); dots[k].setAttribute("opacity", 1); });
+    tip.innerHTML = `<b>${cfg.xLabel(xs[i])}</b><br>` + cfg.series.map(s => `<span class="sw" style="background:${s.color}"></span>${s.name}: <b>${cfg.valFmt(s.y[i])}</b>`).join("<br>");
+    tip.style.opacity = 1;
+    const sx = cx * r.width / W, tw = tip.offsetWidth;
+    tip.style.left = (sx + 14 + tw > r.width ? sx - tw - 14 : sx + 14) + "px";
+    tip.style.top = (m.t + 6) + "px";
+  };
+  overlay.addEventListener("mousemove", move); overlay.addEventListener("touchmove", move, { passive: true });
+  overlay.addEventListener("mouseleave", hide); overlay.addEventListener("touchend", hide);
+}
+
+function phaseChart(container, mod, base) {
+  container.innerHTML = "";
+  const W = Math.max(container.clientWidth, 280), H = Math.min(560, Math.max(360, W * 0.55));
+  const m = { l: 64, r: 20, t: 16, b: 44 };
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H }, container);
+  const p = mod.p;
+  const Rmax = Math.max(p.R0, base.Yp[0], mod.Yp[0], 1) * 1.4, Nmax = Math.max(p.N0, base.Yp[1], mod.Yp[1], 1) * 1.4;
+  const xt = niceTicks(0, Rmax, 6), yt = niceTicks(0, Nmax, 5), X1 = xt[xt.length - 1], Y1 = yt[yt.length - 1];
+  const X = v => m.l + v / X1 * (W - m.l - m.r), Y = v => H - m.b - v / Y1 * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg);
+  yt.forEach(v => { el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v) }, g); el("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end" }, svg).textContent = tickFmt(v); });
+  xt.forEach(v => { el("text", { x: X(v), y: H - m.b + 16, "text-anchor": "middle" }, svg).textContent = tickFmt(v); });
+  el("text", { x: (m.l + W - m.r) / 2, y: H - 6, "text-anchor": "middle", class: "axis-title" }, svg).textContent = "R · biomasa de lirio (t)";
+  const ty = el("text", { x: 14, y: (m.t + H - m.b) / 2, "text-anchor": "middle", class: "axis-title", transform: `rotate(-90 14 ${(m.t + H - m.b) / 2})` }, svg); ty.textContent = "N · nutrientes (t)";
+  const [[a, b], [c21, d]] = mod.A;
+  const nx = Math.max(10, Math.round(W / 50)), ny = Math.max(8, Math.round(H / 50)), L = Math.min((W - m.l - m.r) / nx, (H - m.t - m.b) / ny) * 0.38;
+  for (let i = 0; i <= nx; i++) for (let j = 0; j <= ny; j++) {
+    const R = X1 * i / nx, N = Y1 * j / ny, dR = a * R + b * N, dN = p.L_ext + c21 * R + d * N;
+    const ux = dR / X1 * (W - m.l - m.r), uy = -dN / Y1 * (H - m.t - m.b), n = Math.hypot(ux, uy) || 1;
+    const sx = X(R), sy = Y(N), ex = sx + ux / n * L, ey = sy + uy / n * L, ang = Math.atan2(ey - sy, ex - sx);
+    el("path", { d: `M${sx},${sy}L${ex},${ey}M${ex},${ey}L${ex - 4 * Math.cos(ang - 0.5)},${ey - 4 * Math.sin(ang - 0.5)}M${ex},${ey}L${ex - 4 * Math.cos(ang + 0.5)},${ey - 4 * Math.sin(ang + 0.5)}`, stroke: "#c7c7cc", "stroke-width": 1.1, fill: "none", "stroke-linecap": "round" }, svg);
+  }
+  const ts = linspace(0, 40, 300);
+  const starts = [[0.05, 0.95], [0.5, 0.98], [0.95, 0.95], [0.98, 0.5], [0.95, 0.05], [0.5, 0.02], [0.05, 0.05], [0.02, 0.5]];
+  const path = (pts, attrs) => el("path", Object.assign({ d: pts.map((q, k) => `${k ? "L" : "M"}${X(q[0]).toFixed(1)},${Y(q[1]).toFixed(1)}`).join(""), fill: "none", "stroke-linecap": "round" }, attrs), svg);
+  starts.forEach(([fx, fy]) => {
+    const m2 = modelo(Object.assign({}, p, { R0: fx * X1, N0: fy * Y1 }));
+    path(ts.map(t => m2.at(t)).filter(q => q[0] >= 0 && q[1] >= 0 && q[0] <= X1 && q[1] <= Y1), { stroke: "#aeaeb2", "stroke-width": 1.2 });
+  });
+  path(ts.map(t => mod.at(t)), { stroke: COLOR.esc, "stroke-width": 3 });
+  const star = (cx, cy, r, color) => { const pts = []; for (let k = 0; k < 10; k++) { const rr = k % 2 ? r * 0.45 : r, an = -Math.PI / 2 + k * Math.PI / 5; pts.push(`${cx + rr * Math.cos(an)},${cy + rr * Math.sin(an)}`); } el("polygon", { points: pts.join(" "), fill: color }, svg); };
+  el("circle", { cx: X(base.Yp[0]), cy: Y(base.Yp[1]), r: 6, fill: "#fff", stroke: COLOR.base, "stroke-width": 2 }, svg);
+  el("circle", { cx: X(p.R0), cy: Y(p.N0), r: 5, fill: COLOR.aux }, svg);
+  star(X(mod.Yp[0]), Y(mod.Yp[1]), 10, COLOR.esc);
+}
+
+// ---------- Controles ----------
+const state = Object.assign({}, DEFAULTS);
+const inputs = {};
+for (const [box, list] of Object.entries(CONTROLS)) {
+  const host = document.getElementById(box);
+  list.forEach(([key, sym, label, min, max, step, dec, unit, hint]) => {
+    const div = document.createElement("div"); div.className = "ctrl";
+    div.innerHTML = `<div class="ctrl-top"><label for="in-${key}">${sym ? `<i>${sym}</i> · ` : ""}${label}</label><output id="out-${key}"></output></div>
+      <input type="range" id="in-${key}" min="${min}" max="${max}" step="${step}" value="${state[key]}">${hint ? `<div class="hint">${hint}</div>` : ""}`;
+    host.appendChild(div);
+    const inp = div.querySelector("input"), out = div.querySelector("output");
+    const show = () => out.textContent = fmtNum(state[key], dec) + (unit ? " " + unit : "");
+    inp.addEventListener("input", () => { state[key] = +inp.value; show(); schedule(); });
+    inputs[key] = { inp, show };
+    show();
+  });
+}
+document.querySelectorAll(".segmented button").forEach(btn => btn.addEventListener("click", () => {
+  if (btn.dataset.preset === "custom") { document.querySelector("#ctrl-bio").closest("details").open = true; return; }
+  state.eta = +btn.dataset.preset; inputs.eta.inp.value = state.eta; inputs.eta.show(); schedule();
+}));
+document.getElementById("reset").addEventListener("click", () => {
+  Object.assign(state, DEFAULTS);
+  for (const k in inputs) { inputs[k].inp.value = state[k]; inputs[k].show(); }
+  schedule();
+});
+
+// ---------- Renderizado ----------
+function renderKeyResults() {
+  const p0 = Object.assign({}, DEFAULTS, { eta: 0 }), p1 = Object.assign({}, DEFAULTS);
+  const e0 = equilibrio(p0), e1 = equilibrio(p1), h = 0.3 * e1[0], [b1, b2] = biogas(h);
+  const cards = [
+    ["Biomasa de lirio en equilibrio", `${fmtNum(e1[0] / 1000)}<span class="unit">mil t</span>`, `Sin proyecto: <b>${fmtNum(e0[0] / 1000)} mil t</b> · ${fmtNum((e1[0] / e0[0] - 1) * 100, 0)} %`],
+    ["Oxígeno disuelto en equilibrio", `${fmtNum(mgL(e1[2]), 2)}<span class="unit">mg/L</span>`, `Sin proyecto: <b>${fmtNum(mgL(e0[2]), 2)} mg/L</b>, bajo el umbral de 5 mg/L`],
+    ["Cosecha sostenible", `${fmtNum(h / 1000)}<span class="unit">mil t/año</span>`, `<b>${fmtNum(h / 365)} t/día</b> de lirio fresco; retira ${fmtNum(DEFAULTS.c * h)} t de N+P al año`],
+    ["Potencial de biogás", `${fmtNum(b1, 1)}–${fmtNum(b2, 1)}<span class="unit">M m³</span>`, `Millones de m³ al año: estimación conservadora y límite superior`],
+  ];
+  document.getElementById("key-results").innerHTML = cards.map(([l, v, n]) => `<div class="card"><p class="stat-label">${l}</p><p class="stat-value">${v}</p><p class="stat-note">${n}</p></div>`).join("");
+}
+
+function render() {
+  const p = Object.assign({}, state), mod = modelo(p), base = modelo(Object.assign({}, p, { eta: 0 }));
+  const [Rp, Np, Op] = mod.Yp, [Rb, Nb, Ob] = base.Yp, cos = p.eta * Rp, [b1, b2] = biogas(cos);
+  document.querySelectorAll(".segmented button").forEach(b => b.setAttribute("aria-pressed",
+    b.dataset.preset === "custom" ? String(![0, 0.3].includes(p.eta)) : String(+b.dataset.preset === p.eta)));
+
+  const pct = (a, b) => (b ? (a / b - 1) * 100 : 0);
+  const metrics = [
+    ["Biomasa de equilibrio", fmtNum(Rp), "t", p.eta ? `${fmtNum(pct(Rp, Rb), 1)} % vs sin proyecto` : "Escenario sin proyecto"],
+    ["Nutrientes de equilibrio", fmtNum(Np), "t", p.eta ? `${fmtNum(pct(Np, Nb), 1)} %` : "N + P disueltos"],
+    ["Oxígeno de equilibrio", fmtNum(mgL(Op), 2), "mg/L", p.eta ? `${mgL(Op) - mgL(Ob) >= 0 ? "+" : ""}${fmtNum(mgL(Op) - mgL(Ob), 2)} mg/L` : `Cobertura ${fmtNum(cobertura(Rp), 1)} %`],
+    ["Cosecha sostenible", fmtNum(cos), "t/año", `${fmtNum(cos / 365)} t/día`],
+    ["Biogás", `${fmtNum(b1, 1)}–${fmtNum(b2, 1)}`, "M m³", "millones de m³ por año"],
+  ];
+  document.getElementById("metrics").innerHTML = metrics.map(([l, v, u, n]) => `<div class="metric"><p class="stat-label">${l}</p><p class="stat-value">${v}<span class="unit" style="font-size:14px">${u}</span></p><p class="stat-note">${n}</p></div>`).join("");
+
+  const st = document.getElementById("status"), o = mgL(Op);
+  let col, msg;
+  if (!mod.estable || Rp < 0 || Np < 0) [col, msg] = [COLOR.red, "Con estos parámetros el equilibrio no es físicamente válido (valores negativos o inestable): el modelo lineal deja de aplicar."];
+  else if (o < UMBRAL_HIPOXIA) [col, msg] = [COLOR.red, `El oxígeno de equilibrio, ${fmtNum(o, 2)} mg/L, cae por debajo del umbral de hipoxia de 2.5 mg/L.`];
+  else if (o < UMBRAL_PECES) [col, msg] = [COLOR.orange, `El oxígeno de equilibrio, ${fmtNum(o, 2)} mg/L, queda por debajo de 5 mg/L, referencia para peces de agua cálida.`];
+  else [col, msg] = ["#1d8a3a", `El oxígeno de equilibrio, ${fmtNum(o, 2)} mg/L, supera el umbral de 5 mg/L para peces de agua cálida.`];
+  st.innerHTML = `<span class="dot" style="background:${col}"></span><span>${msg}</span>`;
+
+  const t = linspace(0, p.horizonte, 241), Y = t.map(mod.at), Yb = t.map(base.at);
+  const lbl = `η = ${fmtNum(p.eta, 2)}`;
+  const two = (f, name) => [{ y: Yb.map(f), color: COLOR.base, dash: "5 5", width: 2, name: "Sin proyecto" }, { y: Y.map(f), color: COLOR.esc, name: lbl }];
+  const common = { x: t, xLabel: v => `Año ${fmtNum(v, 1)}`, xTitle: "Tiempo (años)" };
+  lineChart(document.getElementById("ch-R"), Object.assign({}, common, { series: two(q => q[0]), valFmt: v => fmtNum(v) + " t" }));
+  lineChart(document.getElementById("ch-N"), Object.assign({}, common, { series: two(q => q[1]), valFmt: v => fmtNum(v, 1) + " t" }));
+  lineChart(document.getElementById("ch-O"), Object.assign({}, common, { series: two(q => mgL(q[2])), valFmt: v => fmtNum(v, 2) + " mg/L",
+    hlines: [{ y: UMBRAL_PECES, label: "5 mg/L · peces", color: COLOR.orange, inRange: true }, { y: UMBRAL_HIPOXIA, label: "2.5 mg/L · hipoxia", color: COLOR.red }] }));
+  lineChart(document.getElementById("ch-C"), Object.assign({}, common, { series: two(q => cobertura(q[0])), valFmt: v => fmtNum(v, 1) + " %" }));
+  document.getElementById("legend-sim").innerHTML = `<span><i class="ln" style="border-color:${COLOR.esc}"></i>Escenario (${lbl})</span><span><i class="ln dash" style="border-color:${COLOR.base}"></i>Sin proyecto (η = 0)</span><span><i class="ln dot" style="border-color:${COLOR.orange}"></i>Umbral para peces</span><span><i class="ln dot" style="border-color:${COLOR.red}"></i>Hipoxia</span>`;
+
+  const hitos = [0, 10, 25, 50, 100].filter(h => h <= p.horizonte);
+  document.getElementById("tbl-tray").innerHTML = `<thead><tr><th>Año</th><th>R (t)</th><th>N (t)</th><th>O (t)</th><th>O (mg/L)</th><th>Cobertura</th><th>R sin proyecto (t)</th><th>O sin proyecto (mg/L)</th></tr></thead><tbody>` +
+    hitos.map(h => { const q = mod.at(h), qb = base.at(h); return `<tr><td>${h}</td><td>${fmtNum(q[0])}</td><td>${fmtNum(q[1])}</td><td>${fmtNum(q[2])}</td><td>${fmtNum(mgL(q[2]), 2)}</td><td>${fmtNum(cobertura(q[0]), 1)} %</td><td class="muted">${fmtNum(qb[0])}</td><td class="muted">${fmtNum(mgL(qb[2]), 2)}</td></tr>`; }).join("") + "</tbody>";
+
+  // Sensibilidad
+  const etas = linspace(0, 1, 101), eqE = etas.map(e => equilibrio(Object.assign({}, p, { eta: e })));
+  const Ls = linspace(100, 600, 101);
+  const sCommon = { valFmt: v => fmtNum(v, 2) + " mg/L", yFmt: v => fmtNum(v, 1) };
+  lineChart(document.getElementById("ch-s-O"), Object.assign({}, sCommon, { x: etas, xLabel: v => `η = ${fmtNum(v, 2)}`, xTitle: "η (año⁻¹)", xFmt: v => fmtNum(v, 1),
+    series: [{ y: eqE.map(q => mgL(q[2])), color: COLOR.esc, name: "O_p" }], vlines: [{ x: p.eta, label: "η elegido" }],
+    hlines: [{ y: UMBRAL_PECES, label: "5 mg/L", color: COLOR.orange, inRange: true }, { y: UMBRAL_HIPOXIA, label: "2.5 mg/L", color: COLOR.red }] }));
+  lineChart(document.getElementById("ch-s-R"), { x: etas, xLabel: v => `η = ${fmtNum(v, 2)}`, xTitle: "η (año⁻¹)", xFmt: v => fmtNum(v, 1), yZero: true, valFmt: v => fmtNum(v) + " t",
+    series: [{ y: eqE.map(q => q[0]), color: COLOR.esc, name: "Biomasa R_p" }, { y: eqE.map((q, i) => etas[i] * q[0]), color: COLOR.aux, width: 2, name: "Cosecha sostenible (t/año)" }],
+    vlines: [{ x: p.eta, label: "η elegido" }] });
+  lineChart(document.getElementById("ch-s-L"), Object.assign({}, sCommon, { x: Ls, xLabel: v => `L_ext = ${fmtNum(v)} t/año`, xTitle: "Carga externa L_ext (t/año)", height: 280,
+    series: [{ y: Ls.map(L => Math.max(0, mgL(equilibrio(Object.assign({}, p, { eta: 0, L_ext: L }))[2]))), color: COLOR.base, dash: "5 5", width: 2, name: "Sin proyecto" },
+             { y: Ls.map(L => Math.max(0, mgL(equilibrio(Object.assign({}, p, { L_ext: L }))[2]))), color: COLOR.esc, name: `Con cosecha (${lbl})` }],
+    vlines: [{ x: p.L_ext, label: "L_ext elegido" }],
+    hlines: [{ y: UMBRAL_PECES, label: "5 mg/L · peces", color: COLOR.orange, inRange: true }, { y: UMBRAL_HIPOXIA, label: "2.5 mg/L · hipoxia", color: COLOR.red, inRange: true }] }));
+  const tEtas = [0, 0.1, 0.2, 0.3, 0.5, 0.8];
+  if (!tEtas.includes(p.eta)) { tEtas.push(p.eta); tEtas.sort((a, b) => a - b); }
+  document.getElementById("tbl-eta").innerHTML = `<thead><tr><th>η (año⁻¹)</th><th>R<sub>p</sub> (t)</th><th>N<sub>p</sub> (t)</th><th>O<sub>p</sub> (mg/L)</th><th>Cobertura</th><th>Cosecha sostenible (t/año)</th><th>Biogás (M m³/año)</th></tr></thead><tbody>` +
+    tEtas.map(e => { const q = equilibrio(Object.assign({}, p, { eta: e })), h = e * q[0], bg = biogas(h); return `<tr class="${e === p.eta ? "hl" : ""}"><td>${fmtNum(e, 2)}${e === 0 ? " · sin proyecto" : ""}</td><td>${fmtNum(q[0])}</td><td>${fmtNum(q[1])}</td><td>${fmtNum(mgL(q[2]), 2)}</td><td>${fmtNum(cobertura(q[0]), 1)} %</td><td>${fmtNum(h)}</td><td>${fmtNum(bg[0], 2)}–${fmtNum(bg[1], 2)}</td></tr>`; }).join("") + "</tbody>";
+
+  // Plano de fase
+  phaseChart(document.getElementById("ch-fase"), mod, base);
+  document.getElementById("legend-fase").innerHTML = `<span><i class="ln" style="border-color:${COLOR.esc}"></i>Trayectoria desde el estado actual (${lbl})</span><span><i class="ln" style="border-color:#aeaeb2"></i>Otras condiciones iniciales</span><span><svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,0 8.8,5 14,5 9.8,8.2 11.3,13.5 7,10.3 2.7,13.5 4.2,8.2 0,5 5.2,5" fill="${COLOR.esc}"/></svg>Equilibrio del escenario</span><span><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#fff" stroke="${COLOR.base}" stroke-width="2"/></svg>Equilibrio sin proyecto</span><span><svg width="12" height="12"><circle cx="6" cy="6" r="4.5" fill="${COLOR.aux}"/></svg>Estado inicial</span>`;
+
+  // Solución analítica
+  document.getElementById("sol-scn").textContent = p.eta ? `el escenario con cosecha (${lbl} año⁻¹)` : "el escenario sin proyecto (η = 0)";
+  const half = l => { const y = Math.log(2) / -l; return l >= 0 ? "—" : y < 0.1 ? `${fmtNum(y * 365, 1)} días` : `${fmtNum(y, 2)} años`; };
+  document.getElementById("tbl-eig").innerHTML = `<thead><tr><th></th><th>λ</th><th>Vida media</th><th>v (R, N, O)</th><th>C</th></tr></thead><tbody>` +
+    mod.lam.map((l, j) => `<tr><td>λ<sub>${j + 1}</sub></td><td>${fmtNum(l, 4)}</td><td>${half(l)}</td><td>(${mod.V[j].map(v => fmtSig(v, 4)).join(", ")})</td><td>${fmtNum(mod.C[j], 2)}</td></tr>`).join("") + "</tbody>";
+  document.getElementById("stab").innerHTML = mod.estable
+    ? `Traza ${fmtNum(mod.A[0][0] + mod.A[1][1], 3)} &lt; 0 y determinante ${fmtSig(mod.det, 4)} &gt; 0: los tres valores propios son negativos y el equilibrio es <b style="color:var(--ink)">estable</b>.`
+    : `El determinante del bloque R–N es ${fmtSig(mod.det, 4)} ≤ 0: hay un valor propio no negativo y el equilibrio es <b style="color:var(--red)">inestable</b>.`;
+  const cell = v => `<span>${fmtSig(v, 4)}</span>`;
+  document.getElementById("mat").innerHTML = `<span>A =</span><div class="matrix">${mod.A.flat().map(cell).join("")}</div><span>F =</span><div class="matrix vec">${mod.F.map(v => `<span>${fmtNum(v, 1)}</span>`).join("")}</div>`;
+  document.getElementById("tbl-eq").innerHTML = `<thead><tr><th></th><th>Toneladas</th><th>Equivalente</th></tr></thead><tbody>
+    <tr><td>R<sub>p</sub></td><td>${fmtNum(Rp)}</td><td>${fmtNum(cobertura(Rp), 1)} % de cobertura</td></tr>
+    <tr><td>N<sub>p</sub></td><td>${fmtNum(Np, 1)}</td><td>${fmtNum(Np / T_POR_MG_L, 2)} mg/L</td></tr>
+    <tr><td>O<sub>p</sub></td><td>${fmtNum(Op, 1)}</td><td>${fmtNum(mgL(Op), 2)} mg/L</td></tr></tbody>`;
+  const mn = s => `<mn>${s}</mn>`, mo = s => `<mo lspace="0" rspace="0">${s}</mo>`, op = s => `<mo>${s}</mo>`;
+  const term = (k, l) => { const s = k < 0 ? "−" : "+"; return `${op(s)}${mn(fmtNum(Math.abs(k), 2))}<mo>&#x2062;</mo><msup><mi>e</mi><mrow>${mn(fmtNum(l, 4).replace("-", "−"))}<mi>t</mi></mrow></msup>`; };
+  document.getElementById("explicit").innerHTML = ["R", "N", "O"].map((nm, i) => {
+    const terms = [0, 1, 2].map(j => [mod.C[j] * mod.V[j][i], mod.lam[j]]).filter(([k]) => Math.abs(k) > 1e-6).map(([k, l]) => term(k, l)).join("");
+    return `<div class="eqb"><math display="block"><mrow><mi>${nm}</mi>${mo("(")}<mi>t</mi>${mo(")")}${op("=")}${mn(fmtNum(mod.Yp[i], 1))}${terms}</mrow></math></div>`;
+  }).join("");
+}
+
+let pending = false;
+function schedule() { if (pending) return; pending = true; requestAnimationFrame(() => { pending = false; render(); }); }
+let lastW = window.innerWidth;
+window.addEventListener("resize", () => { if (Math.abs(window.innerWidth - lastW) > 20) { lastW = window.innerWidth; schedule(); } });
+renderKeyResults();
+render();
+</script>
+</body>
+</html>
