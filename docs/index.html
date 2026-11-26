@@ -34,6 +34,18 @@ section { padding: var(--section-gap) 0; position: relative; }
 .localnav .brand b { color: var(--lima); font-weight: 500; }
 .localnav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; overflow-x: auto; }
 .localnav li a { color: var(--champan); font-size: 11.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; opacity: .72; padding: 4px 0; border-bottom: 1px dashed transparent; transition: opacity .2s, border-color .2s; }
+.menu-btn { display: none; align-items: center; gap: 10px; background: none; border: 1px solid rgba(220,232,180,.35); border-radius: 999px; color: var(--champan);
+  font: 500 11px/1 var(--text); letter-spacing: .12em; text-transform: uppercase; padding: 9px 14px; cursor: pointer; }
+.menu-btn i { position: relative; width: 14px; height: 1px; background: currentColor; transition: background .2s; }
+.menu-btn i::before, .menu-btn i::after { content: ""; position: absolute; left: 0; width: 14px; height: 1px; background: currentColor; transition: transform .3s var(--ease); }
+.menu-btn i::before { top: -4px; } .menu-btn i::after { top: 4px; }
+.localnav.open .menu-btn i { background: transparent; }
+.localnav.open .menu-btn i::before { transform: translateY(4px) rotate(45deg); }
+.localnav.open .menu-btn i::after { transform: translateY(-4px) rotate(-45deg); }
+* { scrollbar-width: thin; scrollbar-color: rgba(167,201,87,.35) transparent; }
+::-webkit-scrollbar { width: 8px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(167,201,87,.35); border-radius: 6px; }
 .localnav li a:hover, .localnav li a.active { opacity: 1; text-decoration: none; border-bottom-color: var(--lima); }
 
 /* Hero */
@@ -226,7 +238,14 @@ h1.in .split-word > span { transform: none; }
   .controls { position: static; max-height: none; }
   .g4 { grid-template-columns: repeat(2, 1fr); }
   .g3, .vars { grid-template-columns: 1fr; }
-  .localnav ul { display: none; }
+  .menu-btn { display: inline-flex; }
+  .localnav ul { position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0; padding: 8px 20px 18px;
+    background: rgba(12,22,16,0.96); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px dashed var(--line);
+    opacity: 0; transform: translateY(-8px); pointer-events: none; transition: opacity .3s var(--ease), transform .3s var(--ease); }
+  .localnav.open ul { opacity: 1; transform: none; pointer-events: auto; }
+  .localnav.open { background: rgba(12,22,16,0.96); }
+  .localnav li a { display: block; padding: 14px 0; font-size: 13px; border-bottom: 1px dashed var(--line); }
+  .localnav li:last-child a { border-bottom: 0; }
 }
 @media (max-width: 680px) {
   :root { --section-gap: 84px; }
@@ -252,7 +271,8 @@ h1.in .split-word > span { transform: none; }
 <nav class="localnav" aria-label="Secciones">
   <div class="wrap">
     <a class="brand" href="#top">Lirio <b>·</b> Pátzcuaro</a>
-    <ul>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links">Menú <i></i></button>
+    <ul id="nav-links">
       <li><a href="#resultados">Resultados</a></li>
       <li><a href="#modelo">Modelo</a></li>
       <li><a href="#simulador">Simulador</a></li>
@@ -442,7 +462,7 @@ h1.in .split-word > span { transform: none; }
     <div class="section-head">
       <div>
         <p class="eyebrow reveal"><b>05</b>Dinámica</p>
-        <h2 class="reveal d1">Plano de fase R–N</h2>
+        <h2 class="reveal d1">Plano de fase <span style="white-space:nowrap">R–N</span></h2>
         <p class="section-lead reveal d2">El subsistema de lirio y nutrientes no depende del oxígeno. Todas las trayectorias convergen al equilibrio estable; el modo lento domina el acercamiento.</p>
       </div>
     </div>
@@ -709,7 +729,7 @@ function phaseChart(container, mod, base) {
   const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, height: H }, container);
   const p = mod.p;
   const Rmax = Math.max(p.R0, base.Yp[0], mod.Yp[0], 1) * 1.4, Nmax = Math.max(p.N0, base.Yp[1], mod.Yp[1], 1) * 1.4;
-  const xt = niceTicks(0, Rmax, 6), yt = niceTicks(0, Nmax, 5), X1 = xt[xt.length - 1], Y1 = yt[yt.length - 1];
+  const xt = niceTicks(0, Rmax, W < 520 ? 3 : 6), yt = niceTicks(0, Nmax, 5), X1 = xt[xt.length - 1], Y1 = yt[yt.length - 1];
   const X = v => m.l + v / X1 * (W - m.l - m.r), Y = v => H - m.b - v / Y1 * (H - m.t - m.b);
   const g = el("g", { class: "grid" }, svg);
   yt.forEach(v => { el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v) }, g); el("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end" }, svg).textContent = tickFmt(v); });
@@ -890,7 +910,11 @@ render();
   }), { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
   document.querySelectorAll(".reveal, .stagger, .chart, h1.split").forEach(n => io.observe(n));
 
-  const nav = document.querySelector(".localnav"), links = [...nav.querySelectorAll("li a")];
+  const nav = document.querySelector(".localnav"), links = [...nav.querySelectorAll("li a")], menuBtn = nav.querySelector(".menu-btn");
+  const setMenu = open => { nav.classList.toggle("open", open); menuBtn.setAttribute("aria-expanded", open); };
+  menuBtn.addEventListener("click", () => setMenu(!nav.classList.contains("open")));
+  links.forEach(a => a.addEventListener("click", () => setMenu(false)));
+  document.addEventListener("click", e => { if (!nav.contains(e.target)) setMenu(false); });
   const so = new IntersectionObserver(entries => entries.forEach(e => {
     if (e.isIntersecting) links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id));
   }), { rootMargin: "-45% 0px -50% 0px" });
