@@ -55,11 +55,11 @@ cosecha_sost = eta * Yp[0]
 bio_min, bio_max = biogas_millones_m3(cosecha_sost)
 
 m = st.columns(5)
-m[0].metric("Biomasa de equilibrio", f"{Yp[0]:,.0f} t", f"{(Yp[0] / Yp_base[0] - 1) * 100:+.1f} % vs sin proyecto", delta_color="inverse")
-m[1].metric("Nutrientes de equilibrio", f"{Yp[1]:,.0f} t", f"{(Yp[1] / Yp_base[1] - 1) * 100:+.1f} %", delta_color="inverse")
-m[2].metric("Oxígeno de equilibrio", f"{a_mg_l(Yp[2]):.2f} mg/L", f"{a_mg_l(Yp[2]) - a_mg_l(Yp_base[2]):+.2f} mg/L")
-m[3].metric("Cosecha sostenible", f"{cosecha_sost:,.0f} t/año", f"{cosecha_sost / 365:,.0f} t/día", delta_color="off")
-m[4].metric("Biogás", f"{bio_min:.2f}–{bio_max:.2f}", "millones de m³/año", delta_color="off")
+m[0].metric("Biomasa de equilibrio (t)", f"{Yp[0]:,.0f}", f"{(Yp[0] / Yp_base[0] - 1) * 100:+.1f} % vs sin proyecto", delta_color="inverse")
+m[1].metric("Nutrientes de equilibrio (t)", f"{Yp[1]:,.0f}", f"{(Yp[1] / Yp_base[1] - 1) * 100:+.1f} %", delta_color="inverse")
+m[2].metric("Oxígeno de equilibrio (mg/L)", f"{a_mg_l(Yp[2]):.2f}", f"{a_mg_l(Yp[2]) - a_mg_l(Yp_base[2]):+.2f} mg/L")
+m[3].metric("Cosecha sostenible (t/año)", f"{cosecha_sost:,.0f}", f"{cosecha_sost / 365:,.0f} t/día", delta_color="off")
+m[4].metric("Biogás (millones de m³/año)", f"{bio_min:.2f}–{bio_max:.2f}", "conservador – máximo", delta_color="off")
 
 if np.any(Yp < 0):
     st.error("Con estos parámetros el equilibrio tiene valores negativos: el modelo lineal deja de ser válido.")
@@ -91,7 +91,7 @@ with tab_tray:
     fig.add_hline(y=UMBRAL_PECES, line=dict(color="orange", dash="dot"), annotation_text="5 mg/L peces", row=2, col=1)
     fig.add_hline(y=UMBRAL_HIPOXIA, line=dict(color="red", dash="dot"), annotation_text="2.5 mg/L hipoxia", row=2, col=1)
     fig.update_xaxes(title_text="t (años)", row=2)
-    fig.update_layout(height=650, hovermode="x unified", legend=dict(orientation="h", y=1.08))
+    fig.update_layout(height=680, hovermode="x unified", margin=dict(t=90), legend=dict(orientation="h", y=1.14))
     st.plotly_chart(fig, width="stretch")
 
     hitos = [h for h in (0, 10, 25, 50, 100) if h <= horizonte]
