@@ -6,57 +6,93 @@
 <title>Lirio, nutrientes y oxígeno en el Lago de Pátzcuaro</title>
 <style>
 :root {
-  --white: #ffffff; --mist: #f5f5f7; --frost: #fafafc; --hairline: #d6d6d6; --control: #e6e6e8;
-  --ink: #1d1d1f; --slate: #707070; --steel: #86868b; --blue: #0066cc; --pill: #0071e3; --orange: #b64400; --red: #c4001a;
-  --series: #0071e3; --base: #86868b;
-  --display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Inter, "Segoe UI", Roboto, Arial, sans-serif;
-  --text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Inter, "Segoe UI", Roboto, Arial, sans-serif;
+  --champan: #DCE8B4; --lima: #A7C957; --musgo: #6A994E; --bosque: #386641; --camel: #B08968;
+  --canvas: #0c1610; --canvas2: #101d14; --surface: #16261a; --surface-hi: #1d3222; --line: #2c4532;
+  --ink: #DCE8B4; --slate: rgba(220,232,180,0.62); --steel: rgba(220,232,180,0.42); --red: #E07A5F;
+  --mist: var(--canvas2); --white: var(--surface); --hairline: var(--line); --control: rgba(220,232,180,0.10);
+  --display: Inter, "Helvetica Neue", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  --text: Inter, "Helvetica Neue", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
   --math: "STIX Two Math", "Cambria Math", "Latin Modern Math", "Times New Roman", serif;
-  --radius-card: 28px; --section-gap: 90px; --gap: 20px;
+  --radius-card: 12px; --section-gap: 120px; --gap: 18px;
+  --ease: cubic-bezier(.2,.7,.2,1);
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 64px; }
-body { margin: 0; background: var(--white); color: var(--ink); font-family: var(--text); font-size: 17px; line-height: 1.47; letter-spacing: -0.374px; -webkit-font-smoothing: antialiased; }
-a { color: var(--blue); text-decoration: none; }
-a:hover { text-decoration: underline; }
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
-section { padding: var(--section-gap) 0; }
-.mist { background: var(--mist); }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; background: var(--canvas); }
+body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--text); font-size: 17px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+::selection { background: var(--lima); color: var(--canvas); }
+a { color: var(--lima); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+section { padding: var(--section-gap) 0; position: relative; }
+.mist { background: var(--canvas2); }
 
-/* Navegación local */
-.localnav { position: sticky; top: 0; z-index: 20; background: rgba(250,250,252,0.92); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--control); }
-.localnav .wrap { display: flex; align-items: center; justify-content: space-between; height: 52px; gap: 24px; }
-.localnav .brand { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: 0.228px; white-space: nowrap; }
-.localnav ul { display: flex; gap: 24px; list-style: none; margin: 0; padding: 0; overflow-x: auto; }
-.localnav li a { color: var(--ink); font-size: 12px; letter-spacing: -0.12px; white-space: nowrap; opacity: 0.8; }
-.localnav li a:hover { opacity: 1; text-decoration: none; color: var(--blue); }
+/* Navegación fija */
+.localnav { position: fixed; top: 0; left: 0; right: 0; z-index: 30; transition: background .4s var(--ease), border-color .4s var(--ease); border-bottom: 1px dashed transparent; }
+.localnav.scrolled { background: rgba(12,22,16,0.82); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); border-bottom-color: var(--line); }
+.localnav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 24px; max-width: none; }
+.localnav .brand { font-weight: 500; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; color: var(--champan); }
+.localnav .brand b { color: var(--lima); font-weight: 500; }
+.localnav ul { display: flex; gap: 26px; list-style: none; margin: 0; padding: 0; overflow-x: auto; }
+.localnav li a { color: var(--champan); font-size: 11.5px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; opacity: .72; padding: 4px 0; border-bottom: 1px dashed transparent; transition: opacity .2s, border-color .2s; }
+.localnav li a:hover, .localnav li a.active { opacity: 1; text-decoration: none; border-bottom-color: var(--lima); }
 
 /* Hero */
-.hero { text-align: center; padding: 96px 0 72px; }
-.kicker { font-family: var(--display); font-weight: 600; font-size: 21px; letter-spacing: 0.231px; margin: 0 0 16px; }
-.kicker.orange { color: var(--orange); font-family: var(--text); font-size: 12px; letter-spacing: -0.12px; }
-h1 { font-family: var(--display); font-weight: 600; font-size: clamp(44px, 7vw, 80px); line-height: 1.05; letter-spacing: -1.2px; margin: 0 auto 24px; max-width: 980px; }
-.lead { font-size: 21px; line-height: 1.38; letter-spacing: 0.231px; color: var(--ink); max-width: 760px; margin: 0 auto 32px; }
-.authors { color: var(--slate); font-size: 14px; letter-spacing: -0.224px; line-height: 1.6; max-width: 760px; margin: 0 auto 36px; }
-.actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-.btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; padding: 11px 22px; font-size: 17px; letter-spacing: -0.374px; font-family: var(--text); cursor: pointer; border: 1px solid transparent; background: none; color: var(--ink); }
-.btn:hover { text-decoration: none; }
-.btn.primary { background: var(--pill); color: #fff; }
-.btn.primary:hover { background: #0077ed; }
-.btn.outline { border-color: var(--pill); color: var(--pill); }
-.btn.small { font-size: 12px; padding: 6px 14px; letter-spacing: -0.12px; }
+.hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: flex-end; overflow: hidden; padding: 140px 0 120px; }
+.hero-media { position: absolute; inset: 0; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; transform-origin: 60% 50%; animation: kenburns 26s var(--ease) both; }
+@keyframes kenburns { from { transform: scale(1.14); } to { transform: scale(1.0); } }
+.hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(12,22,16,.55) 0%, rgba(12,22,16,.18) 35%, rgba(12,22,16,.55) 70%, rgba(12,22,16,1) 100%); }
+.hero-inner { position: relative; z-index: 2; width: 100%; }
+.kicker { font-weight: 500; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--camel); margin: 0 0 22px; }
+.hero .kicker { color: var(--champan); opacity: .85; }
+h1 { font-family: var(--display); font-weight: 500; text-transform: uppercase; font-size: clamp(46px, 7.6vw, 112px); line-height: .9; letter-spacing: -.01em; margin: 0 0 30px; max-width: 1050px; color: var(--champan); }
+h1 em { font-style: normal; color: var(--lima); }
+.lead { font-size: clamp(18px, 1.7vw, 23px); line-height: 1.4; color: var(--champan); max-width: 640px; margin: 0 0 38px; opacity: .92; }
+.actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 10px; border-radius: 36px; padding: 14px 26px; font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; font-family: var(--text); cursor: pointer; border: 1px solid transparent; background: none; color: var(--champan); transition: background .25s, color .25s, border-color .25s, transform .25s var(--ease); }
+.btn:hover { text-decoration: none; transform: translateY(-2px); }
+.btn.primary { background: var(--bosque); color: var(--champan); }
+.btn.primary:hover { background: var(--musgo); }
+.btn.outline { border-color: rgba(220,232,180,.7); border-radius: 22.5px; }
+.btn.outline:hover { background: var(--champan); color: var(--canvas); }
+.btn.small { padding: 9px 16px; font-size: 10.5px; }
+.btn .arr { transition: transform .25s var(--ease); }
+.btn:hover .arr { transform: translateX(4px); }
+.hero-card { position: absolute; z-index: 2; right: 32px; bottom: 120px; width: 330px; background: rgba(12,22,16,.55); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid rgba(220,232,180,.14); border-radius: 12px; padding: 20px 22px; font-size: 13px; line-height: 1.55; color: var(--slate); }
+.hero-card .hc-title { margin: 0; font-size: 11px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--champan); }
+.hero-card p { margin: 0; }
+.dash { border: 0; border-top: 1px dashed rgba(220,232,180,.28); margin: 14px 0; }
+.side-label { position: absolute; z-index: 2; right: 14px; top: 50%; transform: translateY(-50%) rotate(180deg); writing-mode: vertical-rl; margin: 0; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: rgba(220,232,180,.6); }
+.scroll-cue { position: absolute; z-index: 2; left: 50%; bottom: 34px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--champan); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; opacity: .75; }
+.scroll-cue span { width: 1px; height: 46px; background: linear-gradient(var(--champan), transparent); position: relative; overflow: hidden; }
+.scroll-cue span::after { content: ""; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--lima); animation: drip 2.2s var(--ease) infinite; }
+@keyframes drip { from { top: -40%; } to { top: 100%; } }
+.scroll-cue:hover { text-decoration: none; opacity: 1; }
+
+/* Bandas fotográficas */
+.band { position: relative; min-height: 78vh; display: flex; align-items: flex-end; overflow: hidden; padding: 120px 0 90px; }
+.band-img { position: absolute; left: 0; top: -12%; width: 100%; height: 124%; object-fit: cover; will-change: transform; }
+.band-shade { position: absolute; inset: 0; background: linear-gradient(180deg, var(--from, var(--canvas)) 0%, rgba(12,22,16,.25) 28%, rgba(12,22,16,.35) 60%, var(--to, var(--canvas)) 100%); }
+.band-inner { position: relative; z-index: 2; width: 100%; }
+.band-quote { font-weight: 500; text-transform: uppercase; font-size: clamp(28px, 4.2vw, 58px); line-height: .95; margin: 0; max-width: 980px; color: var(--champan); }
+.band-quote em { font-style: normal; color: var(--lima); }
+.credit { margin: 26px 0 0; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--camel); }
+.credit a { color: inherit; }
 
 /* Encabezados de sección */
-.section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; flex-wrap: wrap; }
-h2 { font-family: var(--display); font-weight: 600; font-size: clamp(32px, 4.4vw, 48px); line-height: 1.08; letter-spacing: -0.4px; margin: 0; }
-h3 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height: 1.17; letter-spacing: 0.1px; margin: 0 0 12px; }
-.section-lead { color: var(--slate); max-width: 680px; margin: 12px 0 0; }
+.section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px dashed var(--line); flex-wrap: wrap; }
+.eyebrow { margin: 0 0 18px; font-size: 11.5px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--camel); }
+.eyebrow b { color: var(--lima); font-weight: 500; margin-right: 10px; }
+h2 { font-family: var(--display); font-weight: 500; text-transform: uppercase; font-size: clamp(36px, 5.2vw, 68px); line-height: .92; letter-spacing: -.005em; margin: 0; color: var(--champan); }
+h3 { font-family: var(--display); font-weight: 500; font-size: 15px; line-height: 1.25; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 12px; color: var(--champan); }
+.section-lead { color: var(--slate); max-width: 640px; margin: 18px 0 0; font-size: 18px; line-height: 1.5; }
+.section-head > a { font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; }
 .muted { color: var(--slate); }
-.small { font-size: 14px; letter-spacing: -0.224px; line-height: 1.43; }
+.small { font-size: 14px; line-height: 1.5; }
 
 /* Tarjetas */
-.card { background: var(--white); border-radius: var(--radius-card); padding: 28px; }
-.white-section .card { background: var(--mist); }
+.card { background: var(--surface); border-radius: var(--radius-card); padding: 26px; border: 1px solid rgba(220,232,180,.06); transition: border-color .3s, transform .4s var(--ease); }
+.white-section .card { background: var(--surface); }
 .grid { display: grid; gap: var(--gap); }
 .grid > *, .sim > *, .results > * { min-width: 0; }
 .eqb { overflow-x: auto; overflow-y: hidden; }
@@ -64,104 +100,150 @@ h3 { font-family: var(--display); font-weight: 600; font-size: 24px; line-height
 .g3 { grid-template-columns: repeat(3, 1fr); }
 .g2 { grid-template-columns: repeat(2, 1fr); }
 .span2 { grid-column: span 2; }
-.stat-label { font-size: 14px; letter-spacing: -0.224px; color: var(--slate); margin: 0 0 8px; }
-.stat-value { font-family: var(--display); font-weight: 600; font-size: 40px; line-height: 1.05; letter-spacing: -0.4px; margin: 0; font-variant-numeric: tabular-nums; }
-.stat-value .unit { font-size: 21px; font-weight: 500; color: var(--slate); letter-spacing: 0; margin-left: 4px; }
-.stat-note { font-size: 14px; letter-spacing: -0.224px; color: var(--slate); margin: 10px 0 0; }
-.stat-note b { color: var(--ink); font-weight: 600; }
+#key-results .card { padding: 28px 26px 26px; position: relative; overflow: hidden; }
+#key-results .card::before { content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--lima); transition: width 1.4s var(--ease) .3s; }
+#key-results.in .card::before { width: 100%; }
+#key-results .card:hover { border-color: rgba(167,201,87,.35); transform: translateY(-3px); }
+.stat-label { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); margin: 0 0 14px; }
+.stat-value { font-family: var(--display); font-weight: 500; font-size: 52px; line-height: 1; letter-spacing: -.01em; margin: 0; font-variant-numeric: tabular-nums; color: var(--champan); }
+.stat-value .unit { font-size: 16px; font-weight: 500; color: var(--lima); letter-spacing: .02em; margin-left: 6px; }
+.stat-note { font-size: 13.5px; color: var(--slate); margin: 14px 0 0; line-height: 1.5; }
+.stat-note b { color: var(--champan); font-weight: 600; }
 
 /* Ecuaciones */
-math { font-family: var(--math); font-size: 1.18em; }
+math { font-family: var(--math); font-size: 1.18em; color: var(--champan); }
 math[display="block"] { margin: 0; overflow-x: auto; overflow-y: hidden; padding: 4px 0; }
 .eq-list { display: grid; gap: 18px; }
 .eq-row { display: grid; grid-template-columns: 1fr; gap: 6px; }
-.eq-row .eq-note { font-size: 14px; letter-spacing: -0.224px; color: var(--slate); }
-.vars { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); margin-bottom: 48px; }
-.var-symbol { font-family: var(--math); font-style: italic; font-size: 40px; line-height: 1; margin: 0 0 12px; }
+.eq-row .eq-note { font-size: 14px; color: var(--slate); }
+.vars { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); margin-bottom: 18px; }
+.var-symbol { font-family: var(--math); font-style: italic; font-size: 46px; line-height: 1; margin: 0 0 18px; color: var(--lima); }
 
 /* Simulador */
-.sim { display: grid; grid-template-columns: 320px 1fr; gap: var(--gap); align-items: start; }
-.controls { position: sticky; top: 72px; max-height: calc(100vh - 88px); overflow-y: auto; }
-.controls h3 { font-size: 21px; }
-.segmented { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--mist); border-radius: 9999px; padding: 3px; margin: 4px 0 24px; }
-.segmented button { border: 0; background: transparent; font-family: var(--text); font-size: 12px; letter-spacing: -0.12px; padding: 7px 4px; border-radius: 9999px; cursor: pointer; color: var(--ink); }
-.segmented button[aria-pressed="true"] { background: var(--white); box-shadow: 0 0 0 1px var(--control); font-weight: 600; }
-.ctrl { margin-bottom: 20px; }
-.ctrl-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; }
-.ctrl label { font-size: 14px; letter-spacing: -0.224px; }
-.ctrl label i { font-family: var(--math); font-size: 16px; }
-.ctrl output { font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.224px; }
-.ctrl .hint { font-size: 12px; color: var(--slate); letter-spacing: -0.12px; margin-top: 4px; }
-input[type=range] { width: 100%; accent-color: var(--pill); margin: 0; height: 20px; cursor: pointer; }
-details { border-top: 1px solid var(--control); padding: 14px 0 0; margin-top: 8px; }
+.sim { display: grid; grid-template-columns: 330px 1fr; gap: var(--gap); align-items: start; }
+.controls { position: sticky; top: 84px; max-height: calc(100vh - 100px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.segmented { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--canvas); border: 1px solid var(--line); border-radius: 36px; padding: 3px; margin: 6px 0 26px; }
+.segmented button { border: 0; background: transparent; font-family: var(--text); font-size: 10.5px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 9px 4px; border-radius: 36px; cursor: pointer; color: var(--slate); transition: background .25s, color .25s; }
+.segmented button:hover { color: var(--champan); }
+.segmented button[aria-pressed="true"] { background: var(--bosque); color: var(--champan); }
+.ctrl { margin-bottom: 22px; }
+.ctrl-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+.ctrl label { font-size: 13.5px; color: var(--champan); }
+.ctrl label i { font-family: var(--math); font-size: 16px; color: var(--lima); }
+.ctrl output { font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--champan); white-space: nowrap; }
+.ctrl .hint { font-size: 12px; color: var(--steel); margin-top: 6px; line-height: 1.45; }
+input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: transparent; cursor: pointer; margin: 0; --pct: 50%; }
+input[type=range]::-webkit-slider-runnable-track { height: 3px; border-radius: 3px; background: linear-gradient(90deg, var(--lima) var(--pct), rgba(220,232,180,.16) var(--pct)); }
+input[type=range]::-moz-range-track { height: 3px; border-radius: 3px; background: rgba(220,232,180,.16); }
+input[type=range]::-moz-range-progress { height: 3px; border-radius: 3px; background: var(--lima); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--champan); border: 3px solid var(--bosque); margin-top: -6.5px; transition: transform .2s; }
+input[type=range]::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--champan); border: 3px solid var(--bosque); }
+input[type=range]:hover::-webkit-slider-thumb, input[type=range]:active::-webkit-slider-thumb { transform: scale(1.25); }
+input[type=range]:focus-visible { outline: 1px dashed var(--lima); outline-offset: 4px; }
+details { border-top: 1px dashed var(--line); padding: 16px 0 0; margin-top: 8px; }
 details + details { margin-top: 14px; }
-summary { cursor: pointer; font-size: 14px; letter-spacing: -0.224px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; margin-bottom: 14px; }
+summary { cursor: pointer; font-size: 11.5px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; list-style: none; display: flex; justify-content: space-between; margin-bottom: 16px; color: var(--champan); }
 summary::-webkit-details-marker { display: none; }
-summary::after { content: "+"; font-weight: 400; color: var(--steel); font-size: 18px; line-height: 1; }
-details[open] summary::after { content: "–"; }
+summary::after { content: "+"; font-weight: 400; color: var(--lima); font-size: 18px; line-height: 1; transition: transform .3s var(--ease); }
+details[open] summary::after { transform: rotate(45deg); }
 .results { display: grid; gap: var(--gap); }
 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 12px; }
-.metric { background: var(--white); border-radius: 20px; padding: 16px 16px 14px; }
-.metric .stat-value { font-size: 23px; white-space: nowrap; }
-.metric .stat-label { font-size: 12px; letter-spacing: -0.12px; margin-bottom: 6px; }
-.metric .stat-note { font-size: 12px; letter-spacing: -0.12px; margin-top: 6px; }
-.status { font-size: 14px; letter-spacing: -0.224px; padding: 14px 20px; background: var(--white); border-radius: 20px; display: flex; gap: 10px; align-items: center; }
-.status .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-.chart-card { background: var(--white); border-radius: var(--radius-card); padding: 22px 22px 14px; position: relative; }
-.white-section .chart-card { background: var(--mist); }
-.chart-title { font-family: var(--display); font-size: 17px; font-weight: 600; letter-spacing: 0.1px; margin: 0 0 2px; }
-.chart-sub { font-size: 12px; color: var(--slate); letter-spacing: -0.12px; margin: 0 0 8px; }
+.metric { background: var(--surface); border-radius: 12px; padding: 16px 16px 14px; border: 1px solid rgba(220,232,180,.06); }
+.metric .stat-value { font-size: 24px; white-space: nowrap; transition: color .3s; }
+.metric .stat-label { font-size: 10px; margin-bottom: 10px; letter-spacing: .1em; }
+.metric .stat-note { font-size: 12px; margin-top: 8px; }
+.metric .unit { color: var(--lima); }
+.status { font-size: 14px; padding: 14px 20px; background: var(--surface); border-radius: 12px; display: flex; gap: 12px; align-items: center; border: 1px solid rgba(220,232,180,.06); }
+.status .dot { width: 8px; height: 8px; border-radius: 50%; flex: none; box-shadow: 0 0 0 0 currentColor; animation: pulse 2.4s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(167,201,87,.55); } 70% { box-shadow: 0 0 0 9px rgba(167,201,87,0); } 100% { box-shadow: 0 0 0 0 rgba(167,201,87,0); } }
+.chart-card { background: var(--surface); border-radius: var(--radius-card); padding: 22px 22px 14px; position: relative; border: 1px solid rgba(220,232,180,.06); }
+.white-section .chart-card { background: var(--surface); }
+.chart-title { font-size: 12px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 4px; color: var(--champan); }
+.chart-sub { font-size: 12px; color: var(--steel); margin: 0 0 10px; }
 .chart { width: 100%; position: relative; }
 .chart svg { display: block; width: 100%; overflow: visible; }
-.chart text { font-family: var(--text); font-size: 11px; fill: var(--slate); letter-spacing: -0.1px; }
-.chart .axis line, .chart .grid line { stroke: var(--control); }
+.chart text { font-family: var(--text); font-size: 11px; fill: var(--steel); }
+.chart .axis line, .chart .grid line { stroke: rgba(220,232,180,.08); }
 .chart .axis-title { fill: var(--slate); font-size: 11px; }
-.tooltip { position: absolute; pointer-events: none; background: rgba(255,255,255,0.97); border: 1px solid var(--hairline); border-radius: 12px; padding: 8px 12px; font-size: 12px; letter-spacing: -0.12px; line-height: 1.5; white-space: nowrap; opacity: 0; transition: opacity .12s; z-index: 5; }
+.chart .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.chart.in .draw { stroke-dashoffset: 0; transition: stroke-dashoffset 1.8s var(--ease) .15s; }
+.chart .pop { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.2); }
+.chart.in .pop { opacity: 1; transform: none; transition: opacity .5s ease 1.4s, transform .7s var(--ease) 1.4s; }
+.tooltip { position: absolute; pointer-events: none; background: rgba(12,22,16,.94); border: 1px solid var(--line); border-radius: 10px; padding: 9px 13px; font-size: 12px; line-height: 1.55; white-space: nowrap; opacity: 0; transition: opacity .12s; z-index: 5; color: var(--champan); }
 .tooltip b { font-weight: 600; }
 .tooltip .sw { display: inline-block; width: 10px; height: 2px; vertical-align: middle; margin-right: 6px; }
-.legend { display: flex; gap: 20px; flex-wrap: wrap; font-size: 12px; letter-spacing: -0.12px; color: var(--slate); margin-top: 6px; }
-.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend { display: flex; gap: 20px; flex-wrap: wrap; font-size: 12px; color: var(--slate); margin-top: 8px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
 .legend .ln { width: 18px; height: 0; border-top: 2px solid; }
 .legend .ln.dash { border-top-style: dashed; }
 .legend .ln.dot { border-top-style: dotted; }
 
 /* Tablas */
 .table-wrap { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; letter-spacing: -0.224px; font-variant-numeric: tabular-nums; }
-th { text-align: right; font-weight: 600; color: var(--slate); font-size: 12px; letter-spacing: -0.12px; padding: 10px 12px; border-bottom: 1px solid var(--hairline); white-space: nowrap; }
-td { text-align: right; padding: 10px 12px; border-bottom: 1px solid var(--control); white-space: nowrap; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+th { text-align: right; font-weight: 500; color: var(--steel); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; padding: 12px; border-bottom: 1px dashed var(--line); white-space: nowrap; }
+td { text-align: right; padding: 11px 12px; border-bottom: 1px solid rgba(220,232,180,.07); white-space: nowrap; }
+tbody tr { transition: background .2s; }
+tbody tr:hover { background: rgba(167,201,87,.05); }
 th:first-child, td:first-child { text-align: left; }
 tr:last-child td { border-bottom: 0; }
-tr.hl td { font-weight: 600; }
+tr.hl td { font-weight: 600; color: var(--lima); }
 table.params td, table.params th { text-align: left; white-space: normal; }
-table.params td:nth-child(2) { white-space: nowrap; }
-.matrix { display: inline-grid; grid-template-columns: repeat(3, auto); gap: 6px 28px; padding: 8px 18px; border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); border-radius: 8px; font-variant-numeric: tabular-nums; font-size: 15px; text-align: right; }
+table.params td:nth-child(2) { white-space: nowrap; color: var(--lima); }
+.matrix { display: inline-grid; grid-template-columns: repeat(3, auto); gap: 6px 28px; padding: 8px 18px; border-left: 1.5px solid var(--champan); border-right: 1.5px solid var(--champan); border-radius: 8px; font-variant-numeric: tabular-nums; font-size: 15px; text-align: right; }
 .matrix.vec { grid-template-columns: auto; }
 .matrices { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; font-size: 15px; }
 
-footer { background: var(--mist); padding: 48px 0 64px; font-size: 12px; letter-spacing: -0.12px; color: var(--slate); line-height: 1.6; }
+/* Pie */
+footer { background: var(--canvas); padding: 72px 0 80px; font-size: 13px; color: var(--slate); line-height: 1.65; border-top: 1px dashed var(--line); }
 footer .refs { columns: 2; column-gap: 40px; margin-top: 16px; padding-left: 0; list-style: none; }
 footer .refs li { break-inside: avoid; margin-bottom: 6px; }
-footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
+footer hr { border: 0; border-top: 1px dashed var(--line); margin: 32px 0; }
+.foot-title { margin: 0; font-size: 11.5px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--camel); }
+.foot-mark { font-weight: 500; text-transform: uppercase; font-size: clamp(36px, 7vw, 96px); line-height: .9; color: var(--champan); margin: 0 0 28px; }
+.foot-mark b { color: var(--lima); font-weight: 500; }
 
+/* Animaciones de entrada */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease), transform 1s var(--ease); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal.d1 { transition-delay: .12s; } .reveal.d2 { transition-delay: .24s; } .reveal.d3 { transition-delay: .36s; } .reveal.d4 { transition-delay: .5s; }
+.stagger > * { opacity: 0; transform: translateY(22px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+.stagger.in > * { opacity: 1; transform: none; }
+.stagger.in > *:nth-child(2) { transition-delay: .1s; } .stagger.in > *:nth-child(3) { transition-delay: .2s; } .stagger.in > *:nth-child(4) { transition-delay: .3s; } .stagger.in > *:nth-child(5) { transition-delay: .4s; } .stagger.in > *:nth-child(6) { transition-delay: .5s; }
+.hero .reveal { transition-duration: 1.4s; }
+.split-word { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .04em; }
+.split-word > span { display: inline-block; transform: translateY(105%); transition: transform 1.2s var(--ease); }
+h1.in .split-word > span { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .reveal, .stagger > *, .split-word > span { opacity: 1 !important; transform: none !important; }
+  .chart .draw { stroke-dashoffset: 0; } .chart .pop { opacity: 1; transform: none; }
+}
+@media (max-width: 1100px) { .hero-card { display: none; } }
 @media (max-width: 980px) {
   .sim { grid-template-columns: 1fr; }
   .controls { position: static; max-height: none; }
-  .metrics { grid-template-columns: repeat(2, 1fr); }
   .g4 { grid-template-columns: repeat(2, 1fr); }
   .g3, .vars { grid-template-columns: 1fr; }
+  .localnav ul { display: none; }
 }
 @media (max-width: 680px) {
+  :root { --section-gap: 84px; }
+  .wrap { padding: 0 20px; }
   .g2, .g4 { grid-template-columns: 1fr; }
   .span2 { grid-column: auto; }
-  .localnav ul { display: none; }
   footer .refs { columns: 1; }
+  .side-label { display: none; }
+  .band { min-height: 64vh; }
 }
 @media print {
-  .localnav, .actions, .controls { display: none; }
+  .localnav, .actions, .controls, .scroll-cue, .side-label { display: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .sim { grid-template-columns: 1fr; }
-  section { padding: 32px 0; break-inside: avoid-page; }
-  .mist, footer { background: #fff; }
+  section { padding: 40px 0; }
+  .reveal, .stagger > *, .split-word > span { opacity: 1 !important; transform: none !important; }
+  .chart .draw { stroke-dashoffset: 0; } .chart .pop { opacity: 1; transform: none; }
 }
 </style>
 </head>
@@ -169,59 +251,81 @@ footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
 
 <nav class="localnav" aria-label="Secciones">
   <div class="wrap">
-    <span class="brand">Lirio · Pátzcuaro</span>
+    <a class="brand" href="#top">Lirio <b>·</b> Pátzcuaro</a>
     <ul>
       <li><a href="#resultados">Resultados</a></li>
       <li><a href="#modelo">Modelo</a></li>
       <li><a href="#simulador">Simulador</a></li>
       <li><a href="#sensibilidad">Sensibilidad</a></li>
       <li><a href="#fase">Plano de fase</a></li>
-      <li><a href="#solucion">Solución analítica</a></li>
+      <li><a href="#solucion">Solución</a></li>
       <li><a href="#parametros">Parámetros</a></li>
     </ul>
   </div>
 </nav>
 
-<header class="hero">
-  <div class="wrap">
-    <p class="kicker">Modelo dinámico de tres ecuaciones acopladas</p>
-    <h1>Lirio, nutrientes y oxígeno en el Lago de Pátzcuaro.</h1>
-    <p class="lead">Una cosecha mecánica anual de 30 % de la biomasa de lirio reduce el equilibrio de 391 mil a 174 mil toneladas y eleva el oxígeno disuelto de 4.39 a 5.63 mg/L, por encima del umbral de 5 mg/L para peces de agua cálida.</p>
-    <p class="authors">Gonzalo Flores Casillas · César Ramiro Angeles Torres · Ana Cecilia Fernández Becerril · Tania Danae Ríos Hernández · Tadeo Antonio Horta Díaz<br>Tecnológico de Monterrey, Campus Ciudad de México · 26 de noviembre de 2026</p>
-    <div class="actions">
-      <a class="btn primary" href="#simulador">Abrir el simulador</a>
+<header class="hero" id="top">
+  <div class="hero-media"><img src="__IMG_hero__" alt="Vista del Lago de Pátzcuaro y sus islas desde la isla de Janitzio al atardecer"></div>
+  <div class="hero-shade"></div>
+  <div class="hero-inner wrap">
+    <p class="kicker reveal">Modelo dinámico · tres ecuaciones acopladas</p>
+    <h1 class="split">Lirio, nutrientes y oxígeno en el <em>Lago de Pátzcuaro</em></h1>
+    <p class="lead reveal d2">Una cosecha mecánica anual de 30 % de la biomasa de lirio reduce el equilibrio de 391 mil a 174 mil toneladas y eleva el oxígeno disuelto de 4.39 a 5.63 mg/L, por encima del umbral de 5 mg/L para peces de agua cálida.</p>
+    <div class="actions reveal d3">
+      <a class="btn primary" href="#simulador">Abrir el simulador <span class="arr">→</span></a>
       <a class="btn outline" href="#modelo">Ver el modelo</a>
     </div>
   </div>
+  <aside class="hero-card reveal d4">
+    <p class="hc-title">Equipo de investigación</p>
+    <hr class="dash">
+    <p>Gonzalo Flores Casillas · César Ramiro Angeles Torres · Ana Cecilia Fernández Becerril · Tania Danae Ríos Hernández · Tadeo Antonio Horta Díaz</p>
+    <hr class="dash">
+    <p>Tecnológico de Monterrey, Campus Ciudad de México · 26 de noviembre de 2026</p>
+  </aside>
+  <p class="side-label">Michoacán, México · 2,035 m s. n. m.</p>
+  <a class="scroll-cue" href="#resultados"><span></span>Desliza</a>
 </header>
 
 <section id="resultados" class="mist">
   <div class="wrap">
     <div class="section-head">
       <div>
-        <h2>Resultados clave.</h2>
-        <p class="section-lead">Equilibrio del sistema linealizado sin intervención (η = 0) y con cosecha mecánica para biogás (η = 0.30 año⁻¹).</p>
+        <p class="eyebrow reveal"><b>01</b>Resultados</p>
+        <h2 class="reveal d1">Resultados clave</h2>
+        <p class="section-lead reveal d2">Equilibrio del sistema linealizado sin intervención (η = 0) y con cosecha mecánica para biogás (η = 0.30 año⁻¹).</p>
       </div>
-      <a href="#simulador">Explorar otros escenarios ›</a>
+      <a class="reveal d3" href="#simulador">Explorar otros escenarios →</a>
     </div>
-    <div class="grid g4" id="key-results"></div>
+    <div class="grid g4 stagger" id="key-results"></div>
   </div>
 </section>
+
+<div class="band" style="--from:var(--canvas2);--to:var(--canvas)">
+  <img class="band-img parallax" src="__IMG_eutro__" alt="Lirio acuático cubriendo la orilla del Lago de Pátzcuaro" loading="lazy">
+  <div class="band-shade"></div>
+  <div class="wrap band-inner">
+    <p class="kicker reveal">Punto de partida</p>
+    <p class="band-quote reveal d1">Se estiman <em>360 mil toneladas</em> de lirio sobre cerca del 20 % de las 9,000 ha del lago, con 4.5 mg/L de oxígeno disuelto.</p>
+    <p class="credit reveal d2">Foto: <a href="https://commons.wikimedia.org/wiki/File:Eutrofizaci%C3%B3n_en_Lago_de_P%C3%A1tzcuaro_01.jpg">Isaacvp, CC BY-SA 4.0</a> · Wikimedia Commons</p>
+  </div>
+</div>
 
 <section id="modelo" class="white-section">
   <div class="wrap">
     <div class="section-head">
       <div>
-        <h2>El modelo.</h2>
-        <p class="section-lead">Tres variables de estado describen la retroalimentación entre la biomasa del lirio, los nutrientes limitantes y el oxígeno disuelto del lago.</p>
+        <p class="eyebrow reveal"><b>02</b>Ecuaciones</p>
+        <h2 class="reveal d1">El modelo</h2>
+        <p class="section-lead reveal d2">Tres variables de estado describen la retroalimentación entre la biomasa del lirio, los nutrientes limitantes y el oxígeno disuelto del lago.</p>
       </div>
     </div>
-    <div class="vars">
+    <div class="vars stagger">
       <div class="card"><p class="var-symbol">R(t)</p><h3>Biomasa de lirio</h3><p class="muted small">Toneladas de peso húmedo de <i>Eichhornia crassipes</i> flotante. Cobertura = R / (200 t/ha · 9,000 ha).</p></div>
       <div class="card"><p class="var-symbol">N(t)</p><h3>Nutrientes N + P</h3><p class="muted small">Toneladas de nitrógeno y fósforo disueltos en la columna de agua; el lago está colimitado por ambos.</p></div>
       <div class="card"><p class="var-symbol">O(t)</p><h3>Oxígeno disuelto</h3><p class="muted small">Toneladas de O₂ en 423 millones de m³. Concentración (mg/L) = O / 423.</p></div>
     </div>
-    <div class="grid g2">
+    <div class="grid g2 stagger">
       <div class="card span2">
         <h3>Forma no lineal</h3>
         <p class="muted small" style="margin:0 0 18px">Crecimiento logístico con cinética de Monod y cosecha con respuesta de Holling tipo II.</p>
@@ -250,15 +354,26 @@ footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
   </div>
 </section>
 
+<div class="band" style="--from:var(--canvas);--to:var(--canvas2)">
+  <img class="band-img parallax" src="__IMG_lirio__" alt="Flor y hojas de lirio acuático, Eichhornia crassipes" loading="lazy">
+  <div class="band-shade"></div>
+  <div class="wrap band-inner">
+    <p class="kicker reveal">Eichhornia crassipes</p>
+    <p class="band-quote reveal d1">Cada tonelada de lirio fresco retiene cerca de <em>1.9 kg</em> de nitrógeno y fósforo. Cosecharla es sacar nutrientes del lago.</p>
+    <p class="credit reveal d2">Foto: <a href="https://commons.wikimedia.org/wiki/File:Eichhornia_crassipes_7839.jpg">Vengolis, CC BY-SA 4.0</a> · Wikimedia Commons</p>
+  </div>
+</div>
+
 <section id="simulador" class="mist">
   <div class="wrap">
     <div class="section-head">
       <div>
-        <h2>Simulador.</h2>
-        <p class="section-lead">Mueve los parámetros y observa cómo responden la biomasa, los nutrientes y el oxígeno. La línea punteada gris es siempre el escenario sin proyecto con los mismos parámetros.</p>
+        <p class="eyebrow reveal"><b>03</b>Interactivo</p>
+        <h2 class="reveal d1">Simulador</h2>
+        <p class="section-lead reveal d2">Mueve los parámetros y observa cómo responden la biomasa, los nutrientes y el oxígeno. La línea punteada gris es siempre el escenario sin proyecto con los mismos parámetros.</p>
       </div>
     </div>
-    <div class="sim">
+    <div class="sim reveal">
       <aside class="card controls" aria-label="Controles">
         <h3>Escenario</h3>
         <div class="segmented" role="group" aria-label="Escenarios predefinidos">
@@ -275,7 +390,7 @@ footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
       <div class="results">
         <div class="metrics" id="metrics"></div>
         <div class="status" id="status"></div>
-        <div class="grid g2">
+        <div class="grid g2 stagger">
           <div class="chart-card"><p class="chart-title">Biomasa de lirio</p><p class="chart-sub">R(t), toneladas</p><div class="chart" id="ch-R"></div></div>
           <div class="chart-card"><p class="chart-title">Nutrientes</p><p class="chart-sub">N(t), toneladas de N + P</p><div class="chart" id="ch-N"></div></div>
           <div class="chart-card"><p class="chart-title">Oxígeno disuelto</p><p class="chart-sub">O(t), mg/L</p><div class="chart" id="ch-O"></div></div>
@@ -283,7 +398,7 @@ footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
         </div>
         <div class="legend" id="legend-sim"></div>
         <div class="card" style="padding:20px 24px">
-          <h3 style="font-size:17px">Trayectoria a 10, 25 y 50 años</h3>
+          <h3>Trayectoria a 10, 25 y 50 años</h3>
           <div class="table-wrap"><table id="tbl-tray"></table></div>
         </div>
       </div>
@@ -295,31 +410,43 @@ footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
   <div class="wrap">
     <div class="section-head">
       <div>
-        <h2>Sensibilidad del equilibrio.</h2>
-        <p class="section-lead">Los rendimientos de la cosecha son decrecientes, y la carga externa de nutrientes pesa más que la cosecha: el lirio es más un síntoma que una causa.</p>
+        <p class="eyebrow reveal"><b>04</b>Análisis</p>
+        <h2 class="reveal d1">Sensibilidad del equilibrio</h2>
+        <p class="section-lead reveal d2">Los rendimientos de la cosecha son decrecientes, y la carga externa de nutrientes pesa más que la cosecha: el lirio es más un síntoma que una causa.</p>
       </div>
     </div>
-    <div class="grid g2">
+    <div class="grid g2 stagger">
       <div class="chart-card"><p class="chart-title">Oxígeno de equilibrio vs η</p><p class="chart-sub">O<sub>p</sub> en mg/L</p><div class="chart" id="ch-s-O"></div></div>
       <div class="chart-card"><p class="chart-title">Biomasa y cosecha sostenible vs η</p><p class="chart-sub">Toneladas</p><div class="chart" id="ch-s-R"></div></div>
       <div class="chart-card span2"><p class="chart-title">Oxígeno de equilibrio vs carga externa</p><p class="chart-sub">O<sub>p</sub> en mg/L para L<sub>ext</sub> entre 100 y 600 t/año</p><div class="chart" id="ch-s-L"></div></div>
       <div class="card span2" style="padding:20px 24px">
-        <h3 style="font-size:17px">Equilibrio para distintas intensidades de cosecha</h3>
+        <h3>Equilibrio para distintas intensidades de cosecha</h3>
         <div class="table-wrap"><table id="tbl-eta"></table></div>
       </div>
     </div>
   </div>
 </section>
 
+<div class="band" style="--from:var(--canvas);--to:var(--canvas2)">
+  <img class="band-img parallax" src="__IMG_atardecer__" alt="Atardecer sobre el Lago de Pátzcuaro" loading="lazy">
+  <div class="band-shade"></div>
+  <div class="wrap band-inner">
+    <p class="kicker reveal">Lectura del modelo</p>
+    <p class="band-quote reveal d1">La carga externa de nutrientes pesa más que la cosecha: <em>el lirio es más un síntoma que una causa.</em></p>
+    <p class="credit reveal d2">Foto: <a href="https://commons.wikimedia.org/wiki/File:Lago_de_P%C3%A1tzcuaro_en_el_atardecer.jpg">V of Vivaldi (Kaboom), CC BY-SA 4.0</a> · Wikimedia Commons</p>
+  </div>
+</div>
+
 <section id="fase" class="mist">
   <div class="wrap">
     <div class="section-head">
       <div>
-        <h2>Plano de fase R–N.</h2>
-        <p class="section-lead">El subsistema de lirio y nutrientes no depende del oxígeno. Todas las trayectorias convergen al equilibrio estable; el modo lento domina el acercamiento.</p>
+        <p class="eyebrow reveal"><b>05</b>Dinámica</p>
+        <h2 class="reveal d1">Plano de fase R–N</h2>
+        <p class="section-lead reveal d2">El subsistema de lirio y nutrientes no depende del oxígeno. Todas las trayectorias convergen al equilibrio estable; el modo lento domina el acercamiento.</p>
       </div>
     </div>
-    <div class="chart-card"><div class="chart" id="ch-fase"></div><div class="legend" id="legend-fase"></div></div>
+    <div class="chart-card reveal"><div class="chart" id="ch-fase"></div><div class="legend" id="legend-fase"></div></div>
   </div>
 </section>
 
@@ -327,11 +454,12 @@ footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
   <div class="wrap">
     <div class="section-head">
       <div>
-        <h2>Solución analítica.</h2>
-        <p class="section-lead">Método de valores y vectores propios para <span id="sol-scn"></span>. Los valores se recalculan con los parámetros del simulador.</p>
+        <p class="eyebrow reveal"><b>06</b>Valores propios</p>
+        <h2 class="reveal d1">Solución analítica</h2>
+        <p class="section-lead reveal d2">Método de valores y vectores propios para <span id="sol-scn"></span>. Los valores se recalculan con los parámetros del simulador.</p>
       </div>
     </div>
-    <div class="grid g2">
+    <div class="grid g2 stagger">
       <div class="card span2">
         <h3>1. Valores propios</h3>
         <!--MATH:carac-->
@@ -363,11 +491,12 @@ footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
   <div class="wrap">
     <div class="section-head">
       <div>
-        <h2>Parámetros.</h2>
-        <p class="section-lead">Cada valor se apoyó en datos publicados del lago; cuando no hubo medición directa se usaron casos análogos.</p>
+        <p class="eyebrow reveal"><b>07</b>Datos</p>
+        <h2 class="reveal d1">Parámetros</h2>
+        <p class="section-lead reveal d2">Cada valor se apoyó en datos publicados del lago; cuando no hubo medición directa se usaron casos análogos.</p>
       </div>
     </div>
-    <div class="card"><div class="table-wrap"><table class="params">
+    <div class="card reveal"><div class="table-wrap"><table class="params">
       <thead><tr><th>Parámetro</th><th>Valor</th><th>Origen</th><th>Fuente</th></tr></thead>
       <tbody>
         <tr><td>Superficie y profundidad media</td><td>9,000 ha; 4.70 m</td><td>Reportado</td><td>Tomasini-Ortiz et al. (2016)</td></tr>
@@ -392,11 +521,22 @@ footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
   </div>
 </section>
 
+<div class="band" style="--from:var(--canvas2);--to:var(--canvas)">
+  <img class="band-img parallax" src="__IMG_balsero__" alt="Pescador en canoa sobre el Lago de Pátzcuaro" loading="lazy">
+  <div class="band-shade"></div>
+  <div class="wrap band-inner">
+    <p class="kicker reveal">Conclusión</p>
+    <p class="band-quote reveal d1">Con 30 % de cosecha anual el oxígeno de equilibrio sube a <em>5.63 mg/L</em> y el lirio retirado alimenta biogás.</p>
+    <p class="credit reveal d2">Foto: <a href="https://commons.wikimedia.org/wiki/File:Balsero._P%C3%A1tzcuaro,_Michoac%C3%A1n.jpg">Marco Cano Exp, CC BY-SA 4.0</a> · Wikimedia Commons</p>
+  </div>
+</div>
+
 <footer>
   <div class="wrap">
-    <p style="margin:0">Documento interactivo del proyecto <b style="color:var(--ink);font-weight:600">“Modelo dinámico del lirio acuático en el Lago de Pátzcuaro”</b>. Funciona sin conexión: todos los cálculos se hacen en el navegador con el modelo linealizado del documento.</p>
+    <p class="foot-mark reveal">Lirio <b>·</b> Pátzcuaro</p>
+    <p style="margin:0">Documento interactivo del proyecto <b style="color:var(--champan);font-weight:600">“Modelo dinámico del lirio acuático en el Lago de Pátzcuaro”</b>. Funciona sin conexión: todos los cálculos se hacen en el navegador con el modelo linealizado del documento.</p>
     <hr>
-    <p style="margin:0;font-weight:600;color:var(--ink)">Referencias citadas</p>
+    <p class="foot-title">Referencias citadas</p>
     <ul class="refs">
       <li>Bernal-Brooks, F. W. (2002). Disminución del nivel y superficie del Lago de Pátzcuaro.</li>
       <li>Bernal-Brooks, F. W. et al. (2003). Colimitación de nitrógeno y fósforo en Pátzcuaro.</li>
@@ -412,6 +552,15 @@ footer hr { border: 0; border-top: 1px solid var(--hairline); margin: 24px 0; }
       <li>The EastAfrican (2017). Cosechadora de lirio en el Lago Victoria.</li>
       <li>Tomasini-Ortiz, A. C. et al. (2016). Calidad del agua y descargas en la cuenca de Pátzcuaro. IMTA.</li>
       <li>UF/IFAS (s. f.). Water hyacinth. University of Florida.</li>
+    </ul>
+    <hr>
+    <p class="foot-title">Créditos fotográficos</p>
+    <ul class="refs">
+      <li>Portada: Lago de Pátzcuaro desde Janitzio. Gengiskanhg, <a href="https://commons.wikimedia.org/wiki/File:PatzcuaroLakeIslands_fromTheTopOfJanitzioIsland_PatzcuaroLake_MichoacanMexico.jpg">CC BY-SA 3.0</a>.</li>
+      <li>Eutrofización en el Lago de Pátzcuaro. Isaacvp, <a href="https://commons.wikimedia.org/wiki/File:Eutrofizaci%C3%B3n_en_Lago_de_P%C3%A1tzcuaro_01.jpg">CC BY-SA 4.0</a>.</li>
+      <li><i>Eichhornia crassipes</i>. Vengolis, <a href="https://commons.wikimedia.org/wiki/File:Eichhornia_crassipes_7839.jpg">CC BY-SA 4.0</a>.</li>
+      <li>Lago de Pátzcuaro al atardecer. V of Vivaldi (Kaboom), <a href="https://commons.wikimedia.org/wiki/File:Lago_de_P%C3%A1tzcuaro_en_el_atardecer.jpg">CC BY-SA 4.0</a>.</li>
+      <li>Balsero, Pátzcuaro. Marco Cano Exp, <a href="https://commons.wikimedia.org/wiki/File:Balsero._P%C3%A1tzcuaro,_Michoac%C3%A1n.jpg">CC BY-SA 4.0</a>.</li>
     </ul>
   </div>
 </footer>
@@ -446,7 +595,8 @@ const CONTROLS = {
     ["O0", "O(0)", "oxígeno", 0, 12, 0.1, 1, "mg/L"],
   ],
 };
-const COLOR = { esc: "#0071e3", base: "#86868b", aux: "#1d1d1f", orange: "#b64400", red: "#c4001a" };
+const COLOR = { esc: "#A7C957", base: "#93a07f", aux: "#DCE8B4", orange: "#B08968", red: "#E07A5F", ok: "#A7C957", arrow: "rgba(220,232,180,0.20)", other: "rgba(220,232,180,0.32)", bg: "#16261a" };
+const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const UMBRAL_PECES = 5, UMBRAL_HIPOXIA = 2.5;
 
 const fmtNum = (x, d = 0) => Number(x).toLocaleString("es-MX", { minimumFractionDigits: d, maximumFractionDigits: d });
@@ -482,6 +632,7 @@ const equilibrio = p => modelo(p).Yp;
 const mgL = o => o / T_POR_MG_L;
 const cobertura = r => r / DENS / AREA_HA * 100;
 const biogas = h => { const st = h * 0.083; return [st * 0.8482 * 474.9 / 1e6, st * 631 / 1e6]; };
+const anim = c => (REDUCE || c.dataset.drawn) ? {} : { pathLength: 1, class: "draw" };
 const linspace = (a, b, n) => Array.from({ length: n }, (_, i) => a + (b - a) * i / (n - 1));
 
 // ---------- Gráficas SVG ----------
@@ -526,12 +677,12 @@ function lineChart(container, cfg) {
   });
   cfg.series.forEach(s => {
     const d = s.y.map((v, i) => `${i ? "L" : "M"}${X(xs[i]).toFixed(1)},${Y(v).toFixed(1)}`).join("");
-    el("path", { d, fill: "none", stroke: s.color, "stroke-width": s.width || 2.5, "stroke-dasharray": s.dash || "", "stroke-linejoin": "round", "stroke-linecap": "round" }, svg);
+    el("path", Object.assign({ d, fill: "none", stroke: s.color, "stroke-width": s.width || 2.5, "stroke-dasharray": s.dash || "", "stroke-linejoin": "round", "stroke-linecap": "round" }, s.dash ? {} : anim(container)), svg);
   });
   // Interacción
   const tip = document.createElement("div"); tip.className = "tooltip"; container.appendChild(tip);
   const cross = el("line", { y1: m.t, y2: H - m.b, stroke: COLOR.aux, "stroke-width": 1, opacity: 0 }, svg);
-  const dots = cfg.series.map(s => el("circle", { r: 4, fill: "#fff", stroke: s.color, "stroke-width": 2, opacity: 0 }, svg));
+  const dots = cfg.series.map(s => el("circle", { r: 4, fill: COLOR.bg, stroke: s.color, "stroke-width": 2, opacity: 0 }, svg));
   const overlay = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
   const hide = () => { tip.style.opacity = 0; cross.setAttribute("opacity", 0); dots.forEach(d => d.setAttribute("opacity", 0)); };
   const move = ev => {
@@ -571,19 +722,19 @@ function phaseChart(container, mod, base) {
     const R = X1 * i / nx, N = Y1 * j / ny, dR = a * R + b * N, dN = p.L_ext + c21 * R + d * N;
     const ux = dR / X1 * (W - m.l - m.r), uy = -dN / Y1 * (H - m.t - m.b), n = Math.hypot(ux, uy) || 1;
     const sx = X(R), sy = Y(N), ex = sx + ux / n * L, ey = sy + uy / n * L, ang = Math.atan2(ey - sy, ex - sx);
-    el("path", { d: `M${sx},${sy}L${ex},${ey}M${ex},${ey}L${ex - 4 * Math.cos(ang - 0.5)},${ey - 4 * Math.sin(ang - 0.5)}M${ex},${ey}L${ex - 4 * Math.cos(ang + 0.5)},${ey - 4 * Math.sin(ang + 0.5)}`, stroke: "#c7c7cc", "stroke-width": 1.1, fill: "none", "stroke-linecap": "round" }, svg);
+    el("path", { d: `M${sx},${sy}L${ex},${ey}M${ex},${ey}L${ex - 4 * Math.cos(ang - 0.5)},${ey - 4 * Math.sin(ang - 0.5)}M${ex},${ey}L${ex - 4 * Math.cos(ang + 0.5)},${ey - 4 * Math.sin(ang + 0.5)}`, stroke: COLOR.arrow, "stroke-width": 1.1, fill: "none", "stroke-linecap": "round" }, svg);
   }
   const ts = linspace(0, 40, 300);
   const starts = [[0.05, 0.95], [0.5, 0.98], [0.95, 0.95], [0.98, 0.5], [0.95, 0.05], [0.5, 0.02], [0.05, 0.05], [0.02, 0.5]];
   const path = (pts, attrs) => el("path", Object.assign({ d: pts.map((q, k) => `${k ? "L" : "M"}${X(q[0]).toFixed(1)},${Y(q[1]).toFixed(1)}`).join(""), fill: "none", "stroke-linecap": "round" }, attrs), svg);
   starts.forEach(([fx, fy]) => {
     const m2 = modelo(Object.assign({}, p, { R0: fx * X1, N0: fy * Y1 }));
-    path(ts.map(t => m2.at(t)).filter(q => q[0] >= 0 && q[1] >= 0 && q[0] <= X1 && q[1] <= Y1), { stroke: "#aeaeb2", "stroke-width": 1.2 });
+    path(ts.map(t => m2.at(t)).filter(q => q[0] >= 0 && q[1] >= 0 && q[0] <= X1 && q[1] <= Y1), { stroke: COLOR.other, "stroke-width": 1.2 });
   });
-  path(ts.map(t => mod.at(t)), { stroke: COLOR.esc, "stroke-width": 3 });
-  const star = (cx, cy, r, color) => { const pts = []; for (let k = 0; k < 10; k++) { const rr = k % 2 ? r * 0.45 : r, an = -Math.PI / 2 + k * Math.PI / 5; pts.push(`${cx + rr * Math.cos(an)},${cy + rr * Math.sin(an)}`); } el("polygon", { points: pts.join(" "), fill: color }, svg); };
-  el("circle", { cx: X(base.Yp[0]), cy: Y(base.Yp[1]), r: 6, fill: "#fff", stroke: COLOR.base, "stroke-width": 2 }, svg);
-  el("circle", { cx: X(p.R0), cy: Y(p.N0), r: 5, fill: COLOR.aux }, svg);
+  path(ts.map(t => mod.at(t)), Object.assign({ stroke: COLOR.esc, "stroke-width": 3 }, anim(container)));
+  const star = (cx, cy, r, color) => { const pts = []; for (let k = 0; k < 10; k++) { const rr = k % 2 ? r * 0.45 : r, an = -Math.PI / 2 + k * Math.PI / 5; pts.push(`${cx + rr * Math.cos(an)},${cy + rr * Math.sin(an)}`); } el("polygon", { points: pts.join(" "), fill: color, class: "pop" }, svg); };
+  el("circle", { cx: X(base.Yp[0]), cy: Y(base.Yp[1]), r: 6, fill: COLOR.bg, stroke: COLOR.base, class: "pop", "stroke-width": 2 }, svg);
+  el("circle", { cx: X(p.R0), cy: Y(p.N0), r: 5, fill: COLOR.aux, class: "pop" }, svg);
   star(X(mod.Yp[0]), Y(mod.Yp[1]), 10, COLOR.esc);
 }
 
@@ -598,7 +749,7 @@ for (const [box, list] of Object.entries(CONTROLS)) {
       <input type="range" id="in-${key}" min="${min}" max="${max}" step="${step}" value="${state[key]}">${hint ? `<div class="hint">${hint}</div>` : ""}`;
     host.appendChild(div);
     const inp = div.querySelector("input"), out = div.querySelector("output");
-    const show = () => out.textContent = fmtNum(state[key], dec) + (unit ? " " + unit : "");
+    const show = () => { out.textContent = fmtNum(state[key], dec) + (unit ? " " + unit : ""); inp.style.setProperty("--pct", ((inp.value - min) / (max - min) * 100) + "%"); };
     inp.addEventListener("input", () => { state[key] = +inp.value; show(); schedule(); });
     inputs[key] = { inp, show };
     show();
@@ -615,14 +766,15 @@ document.getElementById("reset").addEventListener("click", () => {
 });
 
 // ---------- Renderizado ----------
+const cnt = (v, d = 0) => `<span class="count" data-to="${v}" data-dec="${d}">${fmtNum(v, d)}</span>`;
 function renderKeyResults() {
   const p0 = Object.assign({}, DEFAULTS, { eta: 0 }), p1 = Object.assign({}, DEFAULTS);
   const e0 = equilibrio(p0), e1 = equilibrio(p1), h = 0.3 * e1[0], [b1, b2] = biogas(h);
   const cards = [
-    ["Biomasa de lirio en equilibrio", `${fmtNum(e1[0] / 1000)}<span class="unit">mil t</span>`, `Sin proyecto: <b>${fmtNum(e0[0] / 1000)} mil t</b> · ${fmtNum((e1[0] / e0[0] - 1) * 100, 0)} %`],
-    ["Oxígeno disuelto en equilibrio", `${fmtNum(mgL(e1[2]), 2)}<span class="unit">mg/L</span>`, `Sin proyecto: <b>${fmtNum(mgL(e0[2]), 2)} mg/L</b>, bajo el umbral de 5 mg/L`],
-    ["Cosecha sostenible", `${fmtNum(h / 1000)}<span class="unit">mil t/año</span>`, `<b>${fmtNum(h / 365)} t/día</b> de lirio fresco; retira ${fmtNum(DEFAULTS.c * h)} t de N+P al año`],
-    ["Potencial de biogás", `${fmtNum(b1, 1)}–${fmtNum(b2, 1)}<span class="unit">M m³</span>`, `Millones de m³ al año: estimación conservadora y límite superior`],
+    ["Biomasa de lirio en equilibrio", `${cnt(e1[0] / 1000)}<span class="unit">mil t</span>`, `Sin proyecto: <b>${fmtNum(e0[0] / 1000)} mil t</b> · ${fmtNum((e1[0] / e0[0] - 1) * 100, 0)} %`],
+    ["Oxígeno disuelto en equilibrio", `${cnt(mgL(e1[2]), 2)}<span class="unit">mg/L</span>`, `Sin proyecto: <b>${fmtNum(mgL(e0[2]), 2)} mg/L</b>, bajo el umbral de 5 mg/L`],
+    ["Cosecha sostenible", `${cnt(h / 1000)}<span class="unit">mil t/año</span>`, `<b>${fmtNum(h / 365)} t/día</b> de lirio fresco; retira ${fmtNum(DEFAULTS.c * h)} t de N+P al año`],
+    ["Potencial de biogás", `${cnt(b1, 1)}–${cnt(b2, 1)}<span class="unit">M m³</span>`, `Millones de m³ al año: estimación conservadora y límite superior`],
   ];
   document.getElementById("key-results").innerHTML = cards.map(([l, v, n]) => `<div class="card"><p class="stat-label">${l}</p><p class="stat-value">${v}</p><p class="stat-note">${n}</p></div>`).join("");
 }
@@ -648,7 +800,7 @@ function render() {
   if (!mod.estable || Rp < 0 || Np < 0) [col, msg] = [COLOR.red, "Con estos parámetros el equilibrio no es físicamente válido (valores negativos o inestable): el modelo lineal deja de aplicar."];
   else if (o < UMBRAL_HIPOXIA) [col, msg] = [COLOR.red, `El oxígeno de equilibrio, ${fmtNum(o, 2)} mg/L, cae por debajo del umbral de hipoxia de 2.5 mg/L.`];
   else if (o < UMBRAL_PECES) [col, msg] = [COLOR.orange, `El oxígeno de equilibrio, ${fmtNum(o, 2)} mg/L, queda por debajo de 5 mg/L, referencia para peces de agua cálida.`];
-  else [col, msg] = ["#1d8a3a", `El oxígeno de equilibrio, ${fmtNum(o, 2)} mg/L, supera el umbral de 5 mg/L para peces de agua cálida.`];
+  else [col, msg] = [COLOR.ok, `El oxígeno de equilibrio, ${fmtNum(o, 2)} mg/L, supera el umbral de 5 mg/L para peces de agua cálida.`];
   st.innerHTML = `<span class="dot" style="background:${col}"></span><span>${msg}</span>`;
 
   const t = linspace(0, p.horizonte, 241), Y = t.map(mod.at), Yb = t.map(base.at);
@@ -688,7 +840,7 @@ function render() {
 
   // Plano de fase
   phaseChart(document.getElementById("ch-fase"), mod, base);
-  document.getElementById("legend-fase").innerHTML = `<span><i class="ln" style="border-color:${COLOR.esc}"></i>Trayectoria desde el estado actual (${lbl})</span><span><i class="ln" style="border-color:#aeaeb2"></i>Otras condiciones iniciales</span><span><svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,0 8.8,5 14,5 9.8,8.2 11.3,13.5 7,10.3 2.7,13.5 4.2,8.2 0,5 5.2,5" fill="${COLOR.esc}"/></svg>Equilibrio del escenario</span><span><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="#fff" stroke="${COLOR.base}" stroke-width="2"/></svg>Equilibrio sin proyecto</span><span><svg width="12" height="12"><circle cx="6" cy="6" r="4.5" fill="${COLOR.aux}"/></svg>Estado inicial</span>`;
+  document.getElementById("legend-fase").innerHTML = `<span><i class="ln" style="border-color:${COLOR.esc}"></i>Trayectoria desde el estado actual (${lbl})</span><span><i class="ln" style="border-color:${COLOR.other}"></i>Otras condiciones iniciales</span><span><svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,0 8.8,5 14,5 9.8,8.2 11.3,13.5 7,10.3 2.7,13.5 4.2,8.2 0,5 5.2,5" fill="${COLOR.esc}"/></svg>Equilibrio del escenario</span><span><svg width="14" height="14"><circle cx="7" cy="7" r="5" fill="${COLOR.bg}" stroke="${COLOR.base}" stroke-width="2"/></svg>Equilibrio sin proyecto</span><span><svg width="12" height="12"><circle cx="6" cy="6" r="4.5" fill="${COLOR.aux}"/></svg>Estado inicial</span>`;
 
   // Solución analítica
   document.getElementById("sol-scn").textContent = p.eta ? `el escenario con cosecha (${lbl} año⁻¹)` : "el escenario sin proyecto (η = 0)";
@@ -696,7 +848,7 @@ function render() {
   document.getElementById("tbl-eig").innerHTML = `<thead><tr><th></th><th>λ</th><th>Vida media</th><th>v (R, N, O)</th><th>C</th></tr></thead><tbody>` +
     mod.lam.map((l, j) => `<tr><td>λ<sub>${j + 1}</sub></td><td>${fmtNum(l, 4)}</td><td>${half(l)}</td><td>(${mod.V[j].map(v => fmtSig(v, 4)).join(", ")})</td><td>${fmtNum(mod.C[j], 2)}</td></tr>`).join("") + "</tbody>";
   document.getElementById("stab").innerHTML = mod.estable
-    ? `Traza ${fmtNum(mod.A[0][0] + mod.A[1][1], 3)} &lt; 0 y determinante ${fmtSig(mod.det, 4)} &gt; 0: los tres valores propios son negativos y el equilibrio es <b style="color:var(--ink)">estable</b>.`
+    ? `Traza ${fmtNum(mod.A[0][0] + mod.A[1][1], 3)} &lt; 0 y determinante ${fmtSig(mod.det, 4)} &gt; 0: los tres valores propios son negativos y el equilibrio es <b style="color:var(--lima)">estable</b>.`
     : `El determinante del bloque R–N es ${fmtSig(mod.det, 4)} ≤ 0: hay un valor propio no negativo y el equilibrio es <b style="color:var(--red)">inestable</b>.`;
   const cell = v => `<span>${fmtSig(v, 4)}</span>`;
   document.getElementById("mat").innerHTML = `<span>A =</span><div class="matrix">${mod.A.flat().map(cell).join("")}</div><span>F =</span><div class="matrix vec">${mod.F.map(v => `<span>${fmtNum(v, 1)}</span>`).join("")}</div>`;
@@ -718,6 +870,50 @@ let lastW = window.innerWidth;
 window.addEventListener("resize", () => { if (Math.abs(window.innerWidth - lastW) > 20) { lastW = window.innerWidth; schedule(); } });
 renderKeyResults();
 render();
+
+// ---------- Animaciones ----------
+(function () {
+  const h1 = document.querySelector("h1.split");
+  h1.innerHTML = h1.innerHTML.replace(/(<em>|<\/em>)|([^\s<]+)/g, (m, tag, w) => tag ? tag : `<span class="split-word"><span>${w}</span></span>`);
+  h1.querySelectorAll(".split-word > span").forEach((w, i) => w.style.transitionDelay = (0.08 + i * 0.06) + "s");
+  const countUp = root => root.querySelectorAll(".count").forEach(n => {
+    const to = +n.dataset.to, dec = +n.dataset.dec, t0 = performance.now(), D = 1800;
+    if (REDUCE) return;
+    const step = t => { const k = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - k, 4); n.textContent = fmtNum(to * e, dec); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  });
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const t = e.target; t.classList.add("in"); io.unobserve(t);
+    if (t.id === "key-results") countUp(t);
+    if (t.classList.contains("chart")) setTimeout(() => { t.dataset.drawn = "1"; }, 2200);
+  }), { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
+  document.querySelectorAll(".reveal, .stagger, .chart, h1.split").forEach(n => io.observe(n));
+
+  const nav = document.querySelector(".localnav"), links = [...nav.querySelectorAll("li a")];
+  const so = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + e.target.id));
+  }), { rootMargin: "-45% 0px -50% 0px" });
+  document.querySelectorAll("section[id]").forEach(sec => so.observe(sec));
+
+  const px = [...document.querySelectorAll(".parallax")], heroImg = document.querySelector(".hero-media");
+  let ticking = false;
+  const onScroll = () => {
+    ticking = false;
+    nav.classList.toggle("scrolled", scrollY > 40);
+    if (REDUCE) return;
+    const vh = innerHeight;
+    if (scrollY < vh * 1.2) heroImg.style.transform = `translate3d(0, ${scrollY * 0.28}px, 0)`;
+    px.forEach(img => {
+      const r = img.parentElement.getBoundingClientRect();
+      if (r.bottom < -50 || r.top > vh + 50) return;
+      const k = (r.top + r.height / 2 - vh / 2) / (vh + r.height);
+      img.style.transform = `translate3d(0, ${(k * -16).toFixed(2)}%, 0)`;
+    });
+  };
+  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
+})();
 </script>
 </body>
 </html>

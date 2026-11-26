@@ -1,4 +1,5 @@
 """Genera docs/index.html: un solo archivo HTML que funciona sin servidor ni internet."""
+import base64
 import re
 from pathlib import Path
 
@@ -34,6 +35,7 @@ def main():
         return f'<div class="eqb">{mathml}</div>' if modo == "block" else mathml
 
     html = re.sub(r"<!--MATH:(\w+)(?::(inline|block))?-->", sustituir, plantilla)
+    html = re.sub(r"__IMG_(\w+)__", lambda m: "data:image/jpeg;base64," + base64.b64encode((RAIZ / "web" / "img" / f"{m.group(1)}.jpg").read_bytes()).decode(), html)
     salida = RAIZ / "docs" / "index.html"
     salida.parent.mkdir(exist_ok=True)
     salida.write_text(html, encoding="utf-8")
