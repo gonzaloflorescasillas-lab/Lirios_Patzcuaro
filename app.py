@@ -192,12 +192,15 @@ with tab_eig:
     estable = np.all(lam.real < 0)
     st.markdown(f"**Estabilidad:** {'todas las partes reales son negativas, el equilibrio es estable.' if estable else 'hay valores propios con parte real ≥ 0, el equilibrio es inestable.'}")
 
+    def num(x, fmt):
+        return format(x, fmt).replace(",", "{,}")
+
     def termino(cn, l):
-        return f"{cn.real:+,.2f}\\,e^{{{l.real:.4f}t}}"
+        return f"{num(cn.real, '+,.2f')}\\,e^{{{l.real:.4f}t}}"
     st.subheader("Solución explícita")
     for i, nombre in enumerate(["R", "N", "O"]):
         terms = " ".join(termino(C[j] * V[i, j], lam[j]) for j in range(3) if abs((C[j] * V[i, j]).real) > 1e-6)
-        st.latex(f"{nombre}(t) = {Yp[i].real:,.1f} {terms}".replace(",", "{,}"))
+        st.latex(f"{nombre}(t) = {num(Yp[i].real, ',.1f')} {terms}")
 
 with tab_ec:
     st.subheader("Forma no lineal")
