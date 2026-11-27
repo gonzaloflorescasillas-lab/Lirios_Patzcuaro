@@ -36,13 +36,10 @@ def main():
 
     html = re.sub(r"<!--MATH:(\w+)(?::(inline|block))?-->", sustituir, plantilla)
     html = re.sub(r"__IMG_(\w+)__", lambda m: "data:image/jpeg;base64," + base64.b64encode((RAIZ / "web" / "img" / f"{m.group(1)}.jpg").read_bytes()).decode(), html)
-    claro = html.replace('<html lang="es">', '<html lang="es" class="claro">', 1).replace(
-        "</style>", (RAIZ / "web" / "claro.css").read_text(encoding="utf-8") + "</style>", 1)
-    for nombre, contenido in (("index.html", html), ("claro.html", claro)):
-        salida = RAIZ / "docs" / nombre
-        salida.parent.mkdir(exist_ok=True)
-        salida.write_text(contenido, encoding="utf-8")
-        print(f"{salida} ({salida.stat().st_size / 1024:.0f} KB)")
+    salida = RAIZ / "docs" / "index.html"
+    salida.parent.mkdir(exist_ok=True)
+    salida.write_text(html, encoding="utf-8")
+    print(f"{salida} ({salida.stat().st_size / 1024:.0f} KB)")
 
 
 if __name__ == "__main__":
