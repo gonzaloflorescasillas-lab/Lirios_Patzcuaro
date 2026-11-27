@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="claro">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try { if (localStorage.getItem("tema") === "oscuro") document.documentElement.classList.remove("claro"); } catch (e) {}</script>
 <title>Lirio, nutrientes y oxígeno en el Lago de Pátzcuaro</title>
 <style>
 :root {
@@ -265,13 +266,68 @@ h1.in .split-word > span { transform: none; }
   .reveal, .stagger > *, .split-word > span { opacity: 1 !important; transform: none !important; }
   .chart .draw { stroke-dashoffset: 0; } .chart .pop { opacity: 1; transform: none; }
 }
+
+/* Interruptor de tema */
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.theme-btn { position: relative; display: inline-flex; align-items: center; justify-content: space-between; width: 58px; height: 30px; padding: 0 8px; flex: none;
+  border-radius: 999px; border: 1px solid rgba(220,232,180,.4); background: rgba(12,22,16,.25); color: var(--champan); cursor: pointer; transition: border-color .3s, background .3s; }
+.theme-btn svg { width: 13px; height: 13px; position: relative; z-index: 1; opacity: .55; transition: opacity .3s, color .3s; }
+.theme-btn .knob { position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--lima); transition: transform .45s var(--ease), background .3s; }
+html:not(.claro) .theme-btn .knob { transform: translateX(28px); }
+.claro .theme-btn .sun, html:not(.claro) .theme-btn .moon { opacity: 1; color: #0c1610; }
+.theme-btn:hover { border-color: var(--lima); }
+.theme-btn:focus-visible { outline: 1px dashed var(--lima); outline-offset: 3px; }
+body.theme-anim, body.theme-anim * { transition: background-color .5s var(--ease), color .5s var(--ease), border-color .5s var(--ease), fill .5s, stroke .5s !important; }
+/* ---------- Tema claro (html.claro) ---------- */
+html.claro { --canvas: #F5F7EA; --canvas2: #EAF0D6; }
+.claro section, .claro footer, .claro .localnav.scrolled, .claro .localnav.open {
+  --champan: #1E3A25; --lima: #44702F; --ink: #1E3A25;
+  --surface: #FFFFFF; --surface-hi: #F7FAEE; --line: rgba(56,102,65,.24);
+  --slate: rgba(30,58,37,.72); --steel: rgba(30,58,37,.55); --red: #B4452C;
+}
+.claro body { color: #1E3A25; }
+.claro ::selection { background: #A7C957; color: #1E3A25; }
+.claro .localnav.scrolled, .claro .localnav.open { background: rgba(245,247,234,.9); }
+.claro .localnav.scrolled .menu-btn, .claro .localnav.open .menu-btn,
+.claro .localnav.scrolled .theme-btn, .claro .localnav.open .theme-btn { border-color: rgba(30,58,37,.35); }
+@media (max-width: 980px) { .claro .localnav ul { background: rgba(245,247,234,.97); } .claro .localnav.open { background: rgba(245,247,234,.97); } }
+.claro * { scrollbar-color: rgba(56,102,65,.35) transparent; }
+.claro ::-webkit-scrollbar-thumb { background: rgba(56,102,65,.35); }
+.claro .hero-shade { background: linear-gradient(180deg, rgba(12,22,16,.55) 0%, rgba(12,22,16,.18) 35%, rgba(12,22,16,.6) 72%, rgba(12,22,16,.75) 94%, var(--canvas) 100%); }
+.claro .band-shade { background: linear-gradient(90deg, rgba(8,15,10,.70) 0%, rgba(8,15,10,.42) 50%, rgba(8,15,10,0) 82%), linear-gradient(180deg, var(--from) 0%, rgba(12,22,16,.45) 12%, rgba(12,22,16,.5) 88%, var(--to) 100%); }
+@media (max-width: 680px) { .claro .band-shade { background: linear-gradient(180deg, var(--from) 0%, rgba(8,15,10,.55) 12%, rgba(8,15,10,.62) 88%, var(--to) 100%); } }
+.claro .card, .claro .metric, .claro .status, .claro .chart-card { border-color: rgba(56,102,65,.14); }
+.claro #key-results .card::before { background: #A7C957; height: 3px; }
+.claro #key-results .card:hover { border-color: rgba(106,153,78,.5); }
+.claro .segmented button[aria-pressed="true"] { background: var(--bosque); color: #F5F7EA; }
+.claro input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(90deg, #6A994E var(--pct), rgba(56,102,65,.18) var(--pct)); }
+.claro input[type=range]::-moz-range-track { background: rgba(56,102,65,.18); }
+.claro input[type=range]::-moz-range-progress { background: #6A994E; }
+.claro input[type=range]::-webkit-slider-thumb { background: #FFFFFF; border-color: var(--bosque); }
+.claro input[type=range]::-moz-range-thumb { background: #FFFFFF; border-color: var(--bosque); }
+.claro section .btn.outline { border-color: rgba(30,58,37,.45); color: #1E3A25; }
+.claro section .btn.outline:hover { background: var(--bosque); border-color: var(--bosque); color: #F5F7EA; }
+.claro .chart .axis line, .claro .chart .grid line { stroke: rgba(30,58,37,.10); }
+.claro .tooltip { background: rgba(255,255,255,.97); border-color: rgba(56,102,65,.25); color: #1E3A25; }
+.claro td { border-bottom-color: rgba(56,102,65,.10); }
+.claro tbody tr:hover { background: rgba(167,201,87,.12); }
+.claro .var-symbol { color: var(--musgo); }
+.claro footer { background: var(--canvas2); }
+.claro .foot-mark b, .claro .stat-value .unit, .claro .metric .unit { color: var(--musgo); }
 </style>
 </head>
 <body>
 
 <nav class="localnav" aria-label="Secciones">
   <div class="wrap">
-    <a class="brand" href="#top">Lirio <b>·</b> Pátzcuaro</a>
+    <div class="nav-left">
+      <button class="theme-btn" type="button" aria-label="Cambiar entre tema claro y oscuro" title="Tema claro / oscuro">
+        <span class="knob"></span>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>
+      </button>
+      <a class="brand" href="#top">Lirio <b>·</b> Pátzcuaro</a>
+    </div>
     <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav-links">Menú <i></i></button>
     <ul id="nav-links">
       <li><a href="#resultados">Resultados</a></li>
@@ -616,7 +672,11 @@ const CONTROLS = {
     ["O0", "O(0)", "oxígeno", 0, 12, 0.1, 1, "mg/L"],
   ],
 };
-const COLOR = { esc: "#A7C957", base: "#93a07f", aux: "#DCE8B4", orange: "#B08968", red: "#E07A5F", ok: "#A7C957", arrow: "rgba(220,232,180,0.20)", other: "rgba(220,232,180,0.32)", bg: "#16261a" };
+const PALETAS = {
+  claro: { esc: "#4F8A3A", base: "#98A386", aux: "#1E3A25", orange: "#B08968", red: "#C0553A", ok: "#6A994E", arrow: "rgba(30,58,37,0.22)", other: "rgba(30,58,37,0.30)", bg: "#FFFFFF" },
+  oscuro: { esc: "#A7C957", base: "#93a07f", aux: "#DCE8B4", orange: "#B08968", red: "#E07A5F", ok: "#A7C957", arrow: "rgba(220,232,180,0.20)", other: "rgba(220,232,180,0.32)", bg: "#16261a" }
+};
+let COLOR = PALETAS[document.documentElement.classList.contains("claro") ? "claro" : "oscuro"];
 const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const UMBRAL_PECES = 5, UMBRAL_HIPOXIA = 2.5;
 
@@ -891,6 +951,16 @@ let lastW = window.innerWidth;
 window.addEventListener("resize", () => { if (Math.abs(window.innerWidth - lastW) > 20) { lastW = window.innerWidth; schedule(); } });
 renderKeyResults();
 render();
+
+document.querySelector(".theme-btn").addEventListener("click", () => {
+  const root = document.documentElement, claro = !root.classList.contains("claro");
+  document.body.classList.add("theme-anim");
+  root.classList.toggle("claro", claro);
+  COLOR = PALETAS[claro ? "claro" : "oscuro"];
+  try { localStorage.setItem("tema", claro ? "claro" : "oscuro"); } catch (e) {}
+  render();
+  setTimeout(() => document.body.classList.remove("theme-anim"), 600);
+});
 
 // ---------- Animaciones ----------
 (function () {
