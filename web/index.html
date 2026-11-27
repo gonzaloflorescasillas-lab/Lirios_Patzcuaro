@@ -616,7 +616,9 @@ const CONTROLS = {
     ["O0", "O(0)", "oxígeno", 0, 12, 0.1, 1, "mg/L"],
   ],
 };
-const COLOR = { esc: "#A7C957", base: "#93a07f", aux: "#DCE8B4", orange: "#B08968", red: "#E07A5F", ok: "#A7C957", arrow: "rgba(220,232,180,0.20)", other: "rgba(220,232,180,0.32)", bg: "#16261a" };
+const COLOR = document.documentElement.classList.contains("claro")
+  ? { esc: "#4F8A3A", base: "#98A386", aux: "#1E3A25", orange: "#B08968", red: "#C0553A", ok: "#6A994E", arrow: "rgba(30,58,37,0.22)", other: "rgba(30,58,37,0.30)", bg: "#FFFFFF" }
+  : { esc: "#A7C957", base: "#93a07f", aux: "#DCE8B4", orange: "#B08968", red: "#E07A5F", ok: "#A7C957", arrow: "rgba(220,232,180,0.20)", other: "rgba(220,232,180,0.32)", bg: "#16261a" };
 const REDUCE = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const UMBRAL_PECES = 5, UMBRAL_HIPOXIA = 2.5;
 
